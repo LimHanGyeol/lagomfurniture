@@ -1,0 +1,122 @@
+package com.example.lagomfurniture.controller;
+
+import com.example.lagomfurniture.model.User;
+import com.example.lagomfurniture.repository.UserRepository;
+import com.example.lagomfurniture.service.KakaoAPI;
+import com.example.lagomfurniture.utils.HttpSessionUtils;
+import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+
+@Controller
+@RequestMapping("/users")
+public class UserController {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private KakaoAPI kakao;
+
+    //로그인 화면으로 이동
+    @GetMapping("/loginForm")
+    public String loginForm() {
+        System.out.println("로그인화면이동");
+        return "view/users/login";
+    }
+
+    //회원 가입 화면으로 이동
+    @GetMapping("/signup")
+    public String Signup() {
+        System.out.println("회원가입화면이동");
+        return "view/users/register";
+    }
+
+    //회원가입 데이터 전달
+    /*to save user*/
+    @PostMapping("/register") //form태그 action 에서 이동됨
+    public String register(User user) {
+        System.out.println("user: " + user);
+        userRepository.save(user); // Insert Query
+        return "redirect:/users/loginForm"; // 회원가입 끝나면 로그인화면으로 이동
+    }
+
+    //로그인 데이터 전달
+    @PostMapping("/login")
+    public String login(String userEmail, String password, HttpSession session) {
+        User user = userRepository.findByUserEmail(userEmail);
+        if (user == null) {
+            System.out.println("등록된 아이디 없음");
+            return "redirect:/users/loginForm";
+        }
+        if (!user.messagePasswordCheck(password)) {
+            System.out.println("비밀번호 틀림");
+            return "redirect:/users/loginForm";
+        }
+
+        //로그인 성공, 세션에 로그인 정보 저장
+        //session.setAttribute --- 세션에 속성값 설정
+        session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
+        System.out.println("세션에 저장되는 User정보 :  " + user);
+
+        System.out.println("sessionid: " + session);
+        return "redirect:/";
+    }
+
+    //로그아웃
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
+        System.out.println("세션해제 로그아웃");
+        return "redirect:/";
+    }
+
+
+    //카카오 로그인 Api
+    @RequestMapping(value = "/social/kakaologin")
+    public String kakaologin(@RequestParam("code") String code, HttpSession session){
+        System.out.println("code : " + code);
+        String access_Token = kakao.getAccessToken(code);
+        HashMap<String, Object> userInfo = kakao.getUserInfo(access_Token);
+        System.out.println("login Controller : " + userInfo);
+        User KakaoUser = new User(userInfo.get("email").toString(),"kakao",userInfo.get("nickname").toString(),"",userInfo.get("profile_thumbnail_image").toString());
+        userRepository.save(KakaoUser);
+
+        // 클라이언트의 이메일이 존재할 때 세션에 해당 이메일과 토큰 등록
+        if (userInfo.get("email") != null) {
+//            session.setAttribute("userId", userInfo.get("email"));
+            session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, KakaoUser);
+        }
+        return "redirect:/";
+    }
+
+
+    //카카오 로그아웃
+    @RequestMapping(value = "/logout")
+    public String kakaologout(HttpSession session) {
+        kakao.kakaoLogout((String) session.getAttribute("access_Token"));
+        session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
+        session.removeAttribute("userId");
+        return "redirect:/";
+    }
+
+    //From Android
+    @RequestMapping(value = "androidsignup", method = RequestMethod.POST,produces = "applcation/json; charset=UTF-8")
+    @ResponseBody
+    public int signup(String objJson){
+        System.out.println(":::::Sign Up:::::");
+        int result;
+        Gson gson = new Gson();
+        try {
+            User user = gson.fromJson(objJson,User.class);
+            userRepository.save(user); // Insert Query
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return 0;
+    }
+}

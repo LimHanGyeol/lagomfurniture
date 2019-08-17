@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="/static/fonts/material-icon/css/material-design-iconic-font.min.css">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    <!--    sweet alert-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script type="text/javascript">
+
+        function validate() {
+            var re = /^[a-zA-Z0-9]{4,12}$/ // 아이디와 패스워드가 적합한지 검사할 정규식
+            var re2 = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+            // 이메일이 적합한지 검사할 정규식
+
+            var email = document.join.userEmail
+            var nickname = document.join.nickname
+            var password = document.join.password;
+            var re_password = document.join.re_password;
+
+            // ------------ 이메일 까지 -----------
+            //
+            // if(!check(re,id,"아이디는 4~12자의 영문 대소문자와 숫자로만 입력")) {
+            //     return false;
+            // }
+
+            if (!check(re, password, "패스워드는 4~12자의 영문 대소문자와 숫자로만 입력")) {
+                return false; // submit 이벤트를 중지
+            }
+
+            if(password.value ===""){
+                Swal.fire({
+                    type: 'error',
+                    text: '비밀번호를 입력하세요'
+                })
+                password.focus();
+                return false;
+            }
+
+            if (password.value !== re_password.value) {
+                Swal.fire({
+                    type: 'error',
+                    text: '비밀번호가 다릅니다'
+                })
+                re_password.value = "";
+                re_password.focus();
+                return false;
+            }
+            if (email.value === "") {
+                Swal.fire({
+                    type: 'error',
+                    text: '이메일을 입력해 주세요'
+                })
+                email.focus();
+                return false;
+            }
+            if (nickname.value === "") {
+                Swal.fire({
+                    type: 'error',
+                    text: '닉네임을 입력해 주세요'
+                })
+                nickname.focus();
+                return false;
+            }
+
+            if (!check(re2, email, Swal.fire({
+                type: 'error',
+                text: '적합하지 않은 이메일 형식입니다'
+            }))) {
+                return false;
+            }
+
+            var Toast = Swal.mixin({
+                toast: true,
+                position: 'center',
+                showConfirmButton: false,
+                timer: 3000
+            });
+
+            Toast.fire({
+                type: 'success',
+                title: 'Signed in successfully'
+            })
+
+        }
+        function check(re, what, message) {
+            if(re.test(what.value)){
+                return true;
+            } alert(message);
+            what.value ="";
+            what.focus();
+        }
+        </script>
+        </head>
+<body>
+
+    <div class="main">
+        <!-- Sign up / Register form -->
+        <section class="signup">
+            <div class="container">
+                <div class="signup-content">
+                    <div class="signup-form">
+                        <h2 class="form-title">Register</h2>
+                        <form method="POST" class="register-form" id="join" name="join" onsubmit="return validate()" action="/users/register">
+                            <div class="form-group">
+                                <label for="userEmail"><i class="zmdi zmdi-email"></i></label>
+                                <input type="email" name="userEmail" id="userEmail" placeholder="Your Email"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="nickname"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                                <input type="text" name="nickname" id="nickname" placeholder="Your Nickname"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="password"><i class="zmdi zmdi-lock"></i></label>
+                                <input type="password" name="password" id="password" placeholder="Your Password"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="re_password"><i class="zmdi zmdi-lock-outline"></i></label>
+                                <input type="password" name="re_password" id="re_password" placeholder="Repeat your password"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="platform"></label>
+                                <input type="hidden" name="platform" id="platform" value="email"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="profileImage"></label>
+                                <input type="hidden" name="profileImage" id="profileImage" value="null"/>
+                            </div>
+
+
+                            <!--<div class="form-group">-->
+                                <!--<input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />-->
+                                <!--<label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in  <a href="#" class="term-service">Terms of service</a></label>-->
+                            <!--</div>-->
+                            <div class="form-group form-button">
+                                <input type="submit" name="signup" id="signup" class="form-submit" value="Register"/>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="signup-image">
+                        <figure><img src="/static/images/signup-image.jpg" alt="sing up image"></figure>
+                        <a href="/users/loginForm" class="signup-image-link">I am already member</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- JS -->
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/js/main.js"></script>
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>

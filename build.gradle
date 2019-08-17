@@ -1,0 +1,42 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.7.RELEASE'
+    id 'java'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-mustache'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // Maria db
+    implementation 'org.mariadb.jdbc:mariadb-java-client'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    // SNS Login oauth2
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.security.oauth:spring-security-oauth2'
+    implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.6.RELEASE'
+}
