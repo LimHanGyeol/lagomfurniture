@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@ToString
+//@ToString
 @Table(name="user")
 public class User {
     // User Table : id , user_email , platform , nickname , password , profile_image
@@ -105,74 +105,16 @@ public class User {
         }
         return Input_password.equals(password);
     }
-    /*
-    public static User GoogleSignup(GoogleApiLoginData googleApiLoginData) {
 
-        return User.builder()
-                .userEmail(googleApiLoginData.getUser_email())
-                .platform("google")
-                .nickname(googleApiLoginData.getNickname())
-                .password(googleApiLoginData.getPassword())
-                .profileImage(googleApiLoginData.getProfile_image())
-                .build();
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userEmail='" + userEmail + '\'' +
+                ", platform='" + platform + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", password='" + password + '\'' +
+                ", profileImage='" + profileImage + '\'' +
+                '}';
     }
-    */
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
-
-    public String getPlatform() {
-        return platform;
-    }
-
-    public void setPlatform(String platform) {
-        this.platform = platform;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getProfileImage() {
-        return profileImage;
-    }
-
-    public void setProfileImage(String profileImage) {
-        this.profileImage = profileImage;
-    }
-
-    public String getRe_password() {
-        return re_password;
-    }
-
-    public void setRe_password(String re_password) {
-        this.re_password = re_password;
-    }
-
 }
