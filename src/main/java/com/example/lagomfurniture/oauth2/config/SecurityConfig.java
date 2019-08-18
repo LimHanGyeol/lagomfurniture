@@ -15,8 +15,6 @@ import javax.servlet.Filter;
  * Configuration : XML 과 자바를 통한 스프링 시큐리티 설정을 지원한다.
  * SecurityConfig : 스프링 웹 보안을 활성화 하는 가장 간단한 클래스 설정
  */
-//@Log
-
 /* @EnableWebSecurity 는 웹 보안을 활성화 한다는 뜻. 그 자체로는 사용되지 않고, 스프링 시큐리티가
  * WebSecurityConfigure 를 구현하고나 컨텍스트의 WebSecurityConfigureAdapter를
  * 확장한 빈으로 설정되어 있어야 한다.

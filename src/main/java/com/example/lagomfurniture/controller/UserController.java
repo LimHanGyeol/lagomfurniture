@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/users")
@@ -104,19 +105,6 @@ public class UserController {
         return "redirect:/";
     }
 
-    //From Android
-    @RequestMapping(value = "androidsignup", method = RequestMethod.POST,produces = "applcation/json; charset=UTF-8")
-    @ResponseBody
-    public int signup(String objJson){
-        System.out.println(":::::Sign Up:::::");
-        int result;
-        Gson gson = new Gson();
-        try {
-            User user = gson.fromJson(objJson,User.class);
-            userRepository.save(user); // Insert Query
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return 0;
-    }
+
+
 }

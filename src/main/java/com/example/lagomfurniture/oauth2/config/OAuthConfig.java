@@ -37,53 +37,21 @@ public class OAuthConfig {
         OAuth2RestTemplate oAuth2RestTemplate = new OAuth2RestTemplate(googleClient(), oauth2ClientContext);
         filter.setRestTemplate(oAuth2RestTemplate);
         UserInfoTokenServices tokenServices = new UserInfoTokenServices(googleResource().getUserInfoUri(), googleClient().getClientId());
-        //filter.setTokenServices(new UserInfoTokenServices(googleResource().getUserInfoUri(), googleClient().getClientId()));
         filter.setTokenServices(tokenServices);
         return filter;
     }
 
+    @Bean
+    @ConfigurationProperties("security.oauth2.client")
+    public OAuth2ProtectedResourceDetails googleClient() {
+        return new AuthorizationCodeResourceDetails();
+    }
 
-        @Bean
-        @ConfigurationProperties("security.oauth2.client")
-        public OAuth2ProtectedResourceDetails googleClient() {
-            return new AuthorizationCodeResourceDetails();
-        }
-
-        @Bean
-        @ConfigurationProperties("security.oauth2.resource")
-        public ResourceServerProperties googleResource() {
-            return new ResourceServerProperties();
-        }
-
-
-/*
     @Bean
     @ConfigurationProperties("security.oauth2.resource")
-    public ClientResources google() {
-        return new ClientResources();
+    public ResourceServerProperties googleResource() {
+        return new ResourceServerProperties();
     }
-*/
-/*
-    public Filter ssoFilter() {
-        CompositeFilter filter = new CompositeFilter();
-        List<Filter> filters = new ArrayList<>();
-        filters.add(ssoFilter(google(), "/snslogin/google")); //  이전에 등록했던 OAuth 리다이렉트 URL
-        //filters.add(ssoFilter(facebook(), "/login/facebook"));
-        filter.setFilters(filters);
-        return filter;
-    }
-*/
-/*
-    private Filter ssoFilter(ClientResources client, String path) {
-        OAuth2ClientAuthenticationProcessingFilter filter = new OAuth2ClientAuthenticationProcessingFilter(path);
-        OAuth2RestTemplate restTemplate = new OAuth2RestTemplate(client.getClient(), oauth2ClientContext);
-        filter.setRestTemplate(restTemplate);
-        UserInfoTokenServices tokenServices = new UserInfoTokenServices(client.getResource().getUserInfoUri(), client.getClient().getClientId());
-        tokenServices.setRestTemplate(restTemplate);
-        filter.setTokenServices(tokenServices);
-        return filter;
-    }
-*/
 
     @Bean
     public FilterRegistrationBean oauth2ClientFilterRegistration(OAuth2ClientContextFilter filter) {
