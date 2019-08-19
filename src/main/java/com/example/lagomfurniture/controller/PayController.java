@@ -32,9 +32,12 @@ public class PayController {
 
     KakaoPayApprovalVO kakaoPayApprovalVO;
 
-    //상세보기에서 구매 페이지 이동
+    //상세보기에서 구매 페이지 이동 - 여기서 세션 없을경우 이동 못하게 해야함. 2019.08.12. Han Gyeol
     @PostMapping("/{id}")
-    public String payment(@PathVariable Long id, Model model) {
+    public String payment(@PathVariable Long id, Model model, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUserSession(session)) {    // 로그인 정보가 없으면 로그인 화면으로 이동
+            return "view/users/redirect";
+        }
         model.addAttribute("product", productRepository.findById(id).get());
         return "view/shop/payment";
     }
