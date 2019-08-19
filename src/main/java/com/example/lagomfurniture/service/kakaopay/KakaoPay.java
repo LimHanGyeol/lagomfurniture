@@ -52,7 +52,6 @@ public class KakaoPay {
 
         RestTemplate restTemplate = new RestTemplate();
 
-
         // 서버로 요청할 HEADER
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "KakaoAK " + "1d9076b78d6e5e5a34cbf86ac0c0419c");
@@ -62,8 +61,8 @@ public class KakaoPay {
         //서버로 요청할 BODY - 결제로 지정할 데이터
         MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
         params.add("cid", "TC0ONETIME");
-        params.add("partner_order_id", "id"); //결제건에 대한 가맹점의 주문번호. -- productId 넣음
-        params.add("partner_user_id", "user"); //가맹점에서 사용자를 구분할 수 있는 id. --SessionId 넣음
+        params.add("partner_order_id", productId); //결제건에 대한 가맹점의 주문번호. -- productId 넣음
+        params.add("partner_user_id", sessionedUser); //가맹점에서 사용자를 구분할 수 있는 id. --SessionId 넣음
         params.add("item_name", productName);
         params.add("quantity", "1");
         params.add("total_amount", productPrice);
@@ -113,6 +112,16 @@ public class KakaoPay {
 
     public KakaoPayApprovalVO kakaoPayInfo(String pg_token,HttpSession session) {
         System.out.println(":::::::::::::::KakaoPayInfoVO::::::::::::::");
+
+        //세션에 저장된 PRODUCT_SESSION_ID
+        String productSessionId = (String) session.getAttribute(HttpSessionUtils.PRODUCT_SESSION_ID);
+        System.out.println("KakaoPayApprovalVO PRODUCT_SESSION_ID 확인 :  " + productSessionId);
+
+        //세션에 저장된 USER_SESSION_KEY
+        User user = (User) session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
+        String sessionUser = user.getUserEmail();
+        System.out.println("kakaoPayApprovalVO 세션 유저 확인 : " + sessionUser);
+
         //HEADER
         RestTemplate restTemplate = new RestTemplate();
 
@@ -126,8 +135,8 @@ public class KakaoPay {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
         params.add("cid", "TC0ONETIME");
         params.add("tid", kakaoPayReadyVO.getTid());
-        params.add("partner_order_id", "id");
-        params.add("partner_user_id","user");
+        params.add("partner_order_id", productSessionId);
+        params.add("partner_user_id",sessionUser);
         params.add("pg_token", pg_token);
 
 //        params.add("total_amount","10000"); //ready 금액과 동일해야 함 !!!!!!!!!!! 여기 고쳐야 돼!!!!!!!!!!!!!!!!1
@@ -169,11 +178,6 @@ public class KakaoPay {
             System.out.println("order" + orderinfo);
             orderinfoRepository.save(orderinfo); //order_info save data
 
-
-            //세션 유저 확인
-            User user = (User) session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
-            String sessionUser = user.getUserEmail();
-            System.out.println("kakaoPayApprovalVO 세션 유저 확인 : " + sessionUser);
 
 //            List<Product> productList = productRepository.findByProductId(Long.parseLong(kakaoPayApprovalVO.getPartner_order_id()));
 //
