@@ -44,15 +44,16 @@ public class PayController {
     public String kakaoPay(HttpServletRequest request, HttpSession session) {
         String productPrice = request.getParameter("productPrice");
         String productName = request.getParameter("productName");
-        String productid = request.getParameter("productid");
+        String productId = request.getParameter("productid");
 
         User user = (User) session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
         String sessionUser = user.getUserEmail();
 
+        session.setAttribute(HttpSessionUtils.PRODUCT_SESSION_ID,productId);
 
-        System.out.println("price : " + productPrice + ", name : " + productName + "id :" + productid + "sessionId : " + sessionUser);
+        System.out.println("price : " + productPrice + ", name : " + productName + "id :" + productId + "sessionId : " + sessionUser);
         System.out.println("::::::::::::::: KAKAOPAY POST::::::::::::::::");
-        return "redirect:" + kakaopay.kakaoPayReady(productPrice,productName,productid,sessionUser);
+        return "redirect:" + kakaopay.kakaoPayReady(productPrice,productName,productId,sessionUser);
     }
 
 
@@ -61,8 +62,6 @@ public class PayController {
     public String kakaoPaySuccess(@RequestParam("pg_token") String pg_token, Model model, HttpSession session) {
         System.out.println("::::::::::::::: KAKAOPAY SUCCESS GET::::::::::::::");
         System.out.println("KAKAOPAY SUCCESS pg_token" + pg_token);
-
-//        System.out.println(partner_order_id+ ":     확인 partner_order_id");
 
         model.addAttribute("info", kakaopay.kakaoPayInfo(pg_token,session));
 //        model.addAttribute("product", productRepository.findById(id).get());
