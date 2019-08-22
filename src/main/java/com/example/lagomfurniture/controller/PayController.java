@@ -1,5 +1,6 @@
 package com.example.lagomfurniture.controller;
 
+import com.example.lagomfurniture.model.Product;
 import com.example.lagomfurniture.model.User;
 import com.example.lagomfurniture.repository.OrderInfoRepository;
 import com.example.lagomfurniture.repository.ProductRepository;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping("/payment")
@@ -64,8 +66,20 @@ public class PayController {
         System.out.println("KAKAOPAY SUCCESS pg_token" + pg_token);
 
         model.addAttribute("info", kakaopay.kakaoPayInfo(pg_token,session));
+
 //        model.addAttribute("product", productRepository.findById(id).get());
         return "view/shop/kakaoPaySuccess";
+    }
+
+
+    // 카테고리 침대 : Product 의 메인 카테고리로 이동
+    @GetMapping("/bed")
+    public String bed(Model model) {
+        String CATEGORY = "bed";
+        List<Product> productList = productRepository.findByProductCategory(CATEGORY);
+        model.addAttribute("product",productList);
+
+        return "view/shop/product_category/product_bed";
     }
 
 }

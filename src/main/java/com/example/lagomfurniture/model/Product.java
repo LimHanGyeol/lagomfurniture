@@ -49,8 +49,4 @@ public class Product {
     @ManyToMany(mappedBy="products")
     private List<OrderDetail> orderdetails = new ArrayList<OrderDetail>();
 
-    @ManyToMany(mappedBy="products")
-    private List<OrderInfo> orderInfos = new ArrayList<OrderInfo>();
-
-
 }

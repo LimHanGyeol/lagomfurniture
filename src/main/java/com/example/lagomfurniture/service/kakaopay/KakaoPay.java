@@ -6,6 +6,7 @@ import com.example.lagomfurniture.model.User;
 import com.example.lagomfurniture.repository.OrderInfoRepository;
 import com.example.lagomfurniture.repository.ProductRepository;
 import com.example.lagomfurniture.repository.UserRepository;
+import com.example.lagomfurniture.service.OrderInfoService;
 import com.example.lagomfurniture.utils.HttpSessionUtils;
 import com.google.gson.JsonArray;
 import net.minidev.json.JSONArray;
@@ -119,8 +120,13 @@ public class KakaoPay {
 
         //세션에 저장된 USER_SESSION_KEY
         User user = (User) session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
-        String sessionUser = user.getUserEmail();
-        System.out.println("kakaoPayApprovalVO 세션 유저 확인 : " + sessionUser);
+        String sessionUserEmail = user.getUserEmail();
+
+        System.out.println("kakaoPayApprovalVO 세션 유저 확인 : " + sessionUserEmail);
+
+        User user1 = userRepository.findByUserEmail(sessionUserEmail);
+        Long userid = user1.getId();
+        System.out.println("kakaoPayApprovalVO 세션 유저 확인 아이디 : " + userid);
 
         //HEADER
         RestTemplate restTemplate = new RestTemplate();
@@ -136,7 +142,7 @@ public class KakaoPay {
         params.add("cid", "TC0ONETIME");
         params.add("tid", kakaoPayReadyVO.getTid());
         params.add("partner_order_id", productSessionId);
-        params.add("partner_user_id",sessionUser);
+        params.add("partner_user_id",sessionUserEmail);
         params.add("pg_token", pg_token);
 
 //        params.add("total_amount","10000"); //ready 금액과 동일해야 함 !!!!!!!!!!! 여기 고쳐야 돼!!!!!!!!!!!!!!!!1
@@ -157,32 +163,35 @@ public class KakaoPay {
 
             System.out.println("kakaoPayApprovalVO name : " + kakaoPayApprovalVO.getItem_name());
             System.out.println("kakaoPayApprovalVO approved_at : " + kakaoPayApprovalVO.getApproved_at());
-            System.out.println("kakaoPayApprovalVO price : " + kakaoPayApprovalVO.getPayload());
             System.out.println("kakaoPayApprovalVO orderid : " + kakaoPayApprovalVO.getPartner_order_id()); //ProducctId
             System.out.println("kakaoPayApprovalVO userid : " + kakaoPayApprovalVO.getPartner_user_id()); //SessionedUser
             System.out.println("kakaoPayApprovalVO quantity : " + kakaoPayApprovalVO.getQuantity());
             System.out.println("kakaoPayApprovalVO body : " +body.toString());
 
             String price = kakaoPayApprovalVO.getAmount().getTotal().toString();
-            System.out.println("kakaoPayApprovalVO amount" + price);
+            System.out.println("kakaoPayApprovalVO amount: " + price);
+            System.out.println("kakaoPayApprovalVO 한 건당 고유번호 Tid : "+ kakaoPayApprovalVO.getTid());
 
-            String name = kakaoPayApprovalVO.getItem_name();
             String quantity = kakaoPayApprovalVO.getQuantity().toString();
+            String ordernum = kakaoPayApprovalVO.getTid();
 
             //Date to String
             String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(kakaoPayApprovalVO.getCreated_at());
 
             //DB INSERT
-            OrderInfo orderinfo = new OrderInfo(currentDate,price,quantity);
+//            OrderInfo orderinfo = new OrderInfo(ordernum,currentDate,price,quantity);
+//            orderinfoRepository.save(orderinfo); //order_info save data
 
-            System.out.println("order" + orderinfo);
-            orderinfoRepository.save(orderinfo); //order_info save data
+            //결제 내용과 상품 번호 JOIN TABLE DB INSERT
+            List<Product> productList = productRepository.findByProductId(Long.parseLong(kakaoPayApprovalVO.getPartner_order_id()));
+
+            //결제 내용과 유저 이메일 JOIN TABLE DB INSERT
+            List<User> orderUser = userRepository.findByid(userid);
+            System.out.println("order유저 확인 : " + orderUser);
 
 
-//            List<Product> productList = productRepository.findByProductId(Long.parseLong(kakaoPayApprovalVO.getPartner_order_id()));
-//
-//            OrderInfo orderInfo2 = new OrderInfo(currentDate,price,quantity,productList);
-//            model.addAttribute("orderinfo",orderInfo2);
+            OrderInfo orderInfo_product_user = new OrderInfo(ordernum,currentDate,price,quantity,productList,orderUser);
+            orderinfoRepository.save(orderInfo_product_user);
 
             return kakaoPayApprovalVO;
 
@@ -195,6 +204,7 @@ public class KakaoPay {
         }
         return null;
     }
+
 
 
 }

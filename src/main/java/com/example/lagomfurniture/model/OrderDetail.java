@@ -46,9 +46,9 @@ public class OrderDetail {
 
 
     @ManyToMany
-    @JoinTable(name="order_detail_product",
+    @JoinTable(name="order_detail_info",
             joinColumns = @JoinColumn(name = "order_detail_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_info_id"))
+            inverseJoinColumns = @JoinColumn(name = "order_id"))
     private List<OrderInfo> orderInfos = new ArrayList<OrderInfo>();
 
     //결제 시 회원 정보 입력
