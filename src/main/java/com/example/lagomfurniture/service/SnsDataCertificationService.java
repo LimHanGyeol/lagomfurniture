@@ -25,7 +25,7 @@ public class SnsDataCertificationService {
 
     public UsernamePasswordAuthenticationToken doAuthentication(User snsLoginUser){
         if(snsUserService.isExistUser(snsLoginUser)){
-            //기존 회원일 경우에 데이터베이승서 조회해서 인증 처리
+            //기존 회원일 경우에 데이터베이스 에서 조회해서 인증 처리
             final User user = snsUserService.snsUserLogin(snsLoginUser);
             System.out.println("기존 회원일 경우 조회 후 인증 user : "+user);
             httpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY,user);

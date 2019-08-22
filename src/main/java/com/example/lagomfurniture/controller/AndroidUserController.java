@@ -2,6 +2,7 @@ package com.example.lagomfurniture.controller;
 
 import com.example.lagomfurniture.model.User;
 import com.example.lagomfurniture.repository.UserRepository;
+import com.example.lagomfurniture.service.SnsUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,9 @@ public class AndroidUserController {
     @Autowired
     private UserRepository userRepository;
 
+    private SnsUserService snsUserService;
+
+    // 안드로이드 로그인
     @PostMapping("/login_android")
     @ResponseBody
     public Map<String, String> login_android(String userEmail, String password) {
@@ -48,5 +52,25 @@ public class AndroidUserController {
         return loginResult;
     }
 
+    // 안드로이드 회원가입
+    @PostMapping("/register_android")
+    @ResponseBody
+    public Map<String, String> register_android(User user) {
+        Map<String, String> registerResult = new HashMap<>();
+        User RegisterUser = userRepository.findByUserEmail(user.getUserEmail());
+
+        if (RegisterUser != null) {
+            System.out.println("회원가입 실패 : 이메일 중복");
+            registerResult.put("response","exist");
+            return registerResult;
+        }
+
+        System.out.println("회원가입 성공 : " + user);
+        userRepository.save(user);
+        System.out.println("Android Register 성공");
+        registerResult.put("response","success");
+        System.out.println("Register User Json : " + registerResult);
+        return registerResult;
+    }
 
 }

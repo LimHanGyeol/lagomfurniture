@@ -33,11 +33,19 @@ public class SnsUserService {
         }
         return user;
     }
+    // 이메일 체크
     public boolean isExistUser(User snsLoginUser){
         final User user = userRepository.findByUserEmail(snsLoginUser.getUserEmail());
         System.out.println("SNS LOGIN 한 유저가 기존 유저인지 확인 : user " + user);
         return (user != null);
     }
+
+//    // 닉네임 체크
+//    public boolean isExistUserNickname(User RegisterUser) {
+//        User user = userRepository.findByNickname(RegisterUser.getNickname());
+//        System.out.println("입력한 닉네임을 가지고 있는 유저가 있는지 확인 : " + user);
+//        return (user != null);
+//    }
 
 
 }
