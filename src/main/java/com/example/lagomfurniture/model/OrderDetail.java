@@ -23,14 +23,18 @@ public class OrderDetail {
     @Column(name = "order_detail_name")
     private String orderDetailName;
 
-    @Column(name = "order_detail_address1")
-    private String orderDetailAddress1;
-
-    @Column(name = "order_detail_address2")
-    private String orderDetailAddress2;
-
     @Column(name = "order_detail_phone_num")
     private String orderDetailPhoneNum;
+
+    @Column(name = "order_detail_postcode")
+    private String orderDetailPostCode;
+
+    @Column(name = "order_detail_road_address")
+    private String orderDetailRoadAddress;
+
+    @Column(name = "order_detail_address")
+    private String orderDetailAddress;
+
 
     public OrderDetail(){
     }
@@ -52,10 +56,11 @@ public class OrderDetail {
     private List<OrderInfo> orderInfos = new ArrayList<OrderInfo>();
 
     //결제 시 회원 정보 입력
-    public OrderDetail(String orderDetailName, String orderDetailAddress1, String orderDetailAddress2, String orderDetailPhoneNum) {
+    public OrderDetail(String orderDetailName, String orderDetailPhoneNum, String orderDetailPostCode, String orderDetailRoadAddress, String orderDetailAddress) {
         this.orderDetailName = orderDetailName;
-        this.orderDetailAddress1 = orderDetailAddress1;
-        this.orderDetailAddress2 = orderDetailAddress2;
         this.orderDetailPhoneNum = orderDetailPhoneNum;
+        this.orderDetailPostCode = orderDetailPostCode;
+        this.orderDetailRoadAddress = orderDetailRoadAddress;
+        this.orderDetailAddress = orderDetailAddress;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.lagomfurniture.controller;
 
+import com.example.lagomfurniture.model.OrderDetail;
 import com.example.lagomfurniture.model.Product;
 import com.example.lagomfurniture.model.User;
 import com.example.lagomfurniture.repository.OrderInfoRepository;
@@ -34,23 +35,33 @@ public class PayController {
 
     KakaoPayApprovalVO kakaoPayApprovalVO;
 
-    //상세보기에서 구매 페이지 이동
+    //상세보기에서 구매 페이지 이동 - 여기서 세션 없을경우 이동 못하게 해야함. 2019.08.12. Han Gyeol
     @PostMapping("/{id}")
-    public String payment(@PathVariable Long id, Model model) {
+    public String payment(@PathVariable Long id, Model model, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUserSession(session)) {    // 로그인 정보가 없으면 로그인 화면으로 이동
+            return "view/users/redirect";
+        }
         model.addAttribute("product", productRepository.findById(id).get());
         return "view/shop/payment";
     }
 
     //KAKAOPAY
     @PostMapping("/kakaoPay")
-    public String kakaoPay(HttpServletRequest request, HttpSession session) {
+    public String kakaoPay(String userName, String phone_num, String postcode,String roadAddress, String detailAddress,HttpServletRequest request, HttpSession session) {
         String productPrice = request.getParameter("productPrice");
         String productName = request.getParameter("productName");
         String productId = request.getParameter("productid");
 
+        System.out.println("결제하기 입력 데이터 한결 : " + userName + " / " + phone_num  + " / " + roadAddress + " / " + detailAddress);
+
         User user = (User) session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
         String sessionUser = user.getUserEmail();
 
+        //ORDER DETAIL Object SESSION 저장
+        OrderDetail orderDetail = new OrderDetail(userName,phone_num,postcode,roadAddress,detailAddress);
+        session.setAttribute(HttpSessionUtils.ORDER_DETAIL,orderDetail);
+
+        // 결제에 필요한 productId SESSION 저장
         session.setAttribute(HttpSessionUtils.PRODUCT_SESSION_ID,productId);
 
         System.out.println("price : " + productPrice + ", name : " + productName + "id :" + productId + "sessionId : " + sessionUser);
@@ -64,22 +75,12 @@ public class PayController {
     public String kakaoPaySuccess(@RequestParam("pg_token") String pg_token, Model model, HttpSession session) {
         System.out.println("::::::::::::::: KAKAOPAY SUCCESS GET::::::::::::::");
         System.out.println("KAKAOPAY SUCCESS pg_token" + pg_token);
-
         model.addAttribute("info", kakaopay.kakaoPayInfo(pg_token,session));
 
-//        model.addAttribute("product", productRepository.findById(id).get());
+        String productSessionId = (String) session.getAttribute(HttpSessionUtils.PRODUCT_SESSION_ID);
+        System.out.println("SelectedProduct :  " + productSessionId);
+
         return "view/shop/kakaoPaySuccess";
-    }
-
-
-    // 카테고리 침대 : Product 의 메인 카테고리로 이동
-    @GetMapping("/bed")
-    public String bed(Model model) {
-        String CATEGORY = "bed";
-        List<Product> productList = productRepository.findByProductCategory(CATEGORY);
-        model.addAttribute("product",productList);
-
-        return "view/shop/product_category/product_bed";
     }
 
 }
