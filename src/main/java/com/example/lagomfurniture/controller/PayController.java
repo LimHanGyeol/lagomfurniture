@@ -1,5 +1,7 @@
 package com.example.lagomfurniture.controller;
 
+import com.example.lagomfurniture.model.OrderDetail;
+import com.example.lagomfurniture.model.Product;
 import com.example.lagomfurniture.model.User;
 import com.example.lagomfurniture.repository.OrderInfoRepository;
 import com.example.lagomfurniture.repository.ProductRepository;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping("/payment")
@@ -44,14 +47,21 @@ public class PayController {
 
     //KAKAOPAY
     @PostMapping("/kakaoPay")
-    public String kakaoPay(HttpServletRequest request, HttpSession session) {
+    public String kakaoPay(String userName, String phone_num, String postcode,String roadAddress, String detailAddress,HttpServletRequest request, HttpSession session) {
         String productPrice = request.getParameter("productPrice");
         String productName = request.getParameter("productName");
         String productId = request.getParameter("productid");
 
+        System.out.println("결제하기 입력 데이터 한결 : " + userName + " / " + phone_num  + " / " + roadAddress + " / " + detailAddress);
+
         User user = (User) session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
         String sessionUser = user.getUserEmail();
 
+        //ORDER DETAIL Object SESSION 저장
+        OrderDetail orderDetail = new OrderDetail(userName,phone_num,postcode,roadAddress,detailAddress);
+        session.setAttribute(HttpSessionUtils.ORDER_DETAIL,orderDetail);
+
+        // 결제에 필요한 productId SESSION 저장
         session.setAttribute(HttpSessionUtils.PRODUCT_SESSION_ID,productId);
 
         System.out.println("price : " + productPrice + ", name : " + productName + "id :" + productId + "sessionId : " + sessionUser);
@@ -65,9 +75,11 @@ public class PayController {
     public String kakaoPaySuccess(@RequestParam("pg_token") String pg_token, Model model, HttpSession session) {
         System.out.println("::::::::::::::: KAKAOPAY SUCCESS GET::::::::::::::");
         System.out.println("KAKAOPAY SUCCESS pg_token" + pg_token);
-
         model.addAttribute("info", kakaopay.kakaoPayInfo(pg_token,session));
-//        model.addAttribute("product", productRepository.findById(id).get());
+
+        String productSessionId = (String) session.getAttribute(HttpSessionUtils.PRODUCT_SESSION_ID);
+        System.out.println("SelectedProduct :  " + productSessionId);
+
         return "view/shop/kakaoPaySuccess";
     }
 

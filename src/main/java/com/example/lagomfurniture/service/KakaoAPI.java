@@ -6,18 +6,30 @@ import com.example.lagomfurniture.utils.HttpSessionUtils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 public class KakaoAPI {
 
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private SnsUserService snsUserService;
+    @Autowired
+    private HttpSession httpSession;
 
     public String getAccessToken (String authorize_code) {
 
@@ -117,9 +129,21 @@ public class KakaoAPI {
             userInfo.put("email", email);
             userInfo.put("image",image);
 
-            //DB INSERT
-//            User kakaoUser = new User(email,nickname,"");
-//            userRepository.save(kakaoUser);
+            User kakaoUser = new User(email,"kakao",nickname,"",image);
+
+            System.out.println(kakaoUser+ ": KAKAOUSER");
+
+            if(snsUserService.isExistUser(kakaoUser)) {
+                //기존 회원일 경우에 데이터베이승서 조회해서 인증 처리
+                final User user = snsUserService.snsUserLogin(kakaoUser);
+                System.out.println("기존 회원일 경우 조회 후 인증 user : " + user);
+                httpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
+                System.out.println("기존 회원 세션 처리 완료");
+            } else {
+                //DB INSERT
+                userRepository.save(kakaoUser);
+            }
+
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -153,4 +177,5 @@ public class KakaoAPI {
             e.printStackTrace();
         }
     }
+
 }
