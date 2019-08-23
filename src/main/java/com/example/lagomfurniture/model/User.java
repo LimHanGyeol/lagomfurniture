@@ -14,7 +14,6 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-//@ToString
 @Table(name="user")
 public class User {
     // User Table : id , user_email , platform , nickname , password , profile_image
@@ -51,17 +50,13 @@ public class User {
     private List<Product> products = new ArrayList<Product>();
 
     @ManyToMany
-    @JoinTable(name="user_order_info",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id"))
-    private List<OrderInfo> orderInfos = new ArrayList<OrderInfo>();
-
-    @ManyToMany
     @JoinTable(name="user_order_detail",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "order_detail_id"))
     private List<OrderDetail> orderdetails = new ArrayList<OrderDetail>();
 
+    @ManyToMany(mappedBy = "users")
+    private List<OrderInfo> orderInfos = new ArrayList<OrderInfo>();
 
 
     public User() {
@@ -106,16 +101,5 @@ public class User {
         return Input_password.equals(password);
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", userEmail='" + userEmail + '\'' +
-                ", platform='" + platform + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", password='" + password + '\'' +
-                ", profileImage='" + profileImage + '\'' +
-                '}';
-    }
 
 }
