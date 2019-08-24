@@ -21,7 +21,9 @@
 
     <div class="cart-table-area section-padding-100">
         <div class="container-fluid">
+
             <div class="row">
+
                 <div class="col-12 col-lg-8">
                     <div class="checkout_details_area mt-50 clearfix">
 
@@ -29,25 +31,25 @@
                             <h2>결제하기</h2>
                         </div>
 
-
-                        <form action="#" method="post">
+                        {{#sessionUser}}
+                        <form method="post" action="/payment/kakaoPay">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <input type="text" class="form-control" id="first_name" value="" placeholder="이름"
+                                    <input type="text" class="form-control" id="userName" name="userName" value="{{sessionUser.nickname}}" placeholder="이름"
                                            required>
                                 </div>
                                 <div class="col-12 mb-3">
-                                    <input type="text" class="form-control" id="company" placeholder="전화번호" value="">
+                                    <input type="text" class="form-control" id="phone_num" name="phone_num" placeholder="전화번호" value="">
                                 </div>
                                 <!--우편번호 찾기-->
                                 <div class="col-md-6 mb-3">
-                                    <input type="text" class="form-control" id="postcode" placeholder="우편번호" value="">
+                                    <input type="text" class="form-control" id="postcode" name="postcode" placeholder="우편번호" value="">
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <input type="button" class="btn amado-btn-grey w-100 active" onclick="sample4_execDaumPostcode()" value="주소 찾기">
                                 </div>
                                 <div class="col-12 mb-3">
-                                    <input type="text" class="form-control mb-3" id="roadAddress" placeholder="도로명 주소"
+                                    <input type="text" class="form-control mb-3" id="roadAddress" name="roadAddress" placeholder="도로명 주소"
                                            value="">
                                 </div>
                                 <div class="col-12 mb-3">
@@ -56,11 +58,11 @@
                                 </div>
                                 <span id="guide" style="color:#999;display:none"></span>
                                 <div class="col-12 mb-3">
-                                    <input type="text" class="form-control mb-3" id="detailAdress" placeholder="상세 주소"
+                                    <input type="text" class="form-control mb-3" id="detailAddress" name="detailAddress" placeholder="상세 주소"
                                            value="">
                                 </div>
                                 <div class="col-12 mb-3">
-                                    <input type="text" class="form-control mb-3" id="extraAddress" placeholder="참고 항목"
+                                    <input type="text" class="form-control mb-3" id="extraAddress" aceholder="참고 항목"
                                            value="">
                                 </div>
                                 <div class="col-12 mb-3">
@@ -73,18 +75,26 @@
                                         <input type="checkbox" class="custom-control-input" id="customCheck2">
                                         <label class="custom-control-label" for="customCheck2">Create an accout</label>
                                     </div>
-                                    <div class="custom-control custom-checkbox d-block">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck3">
-                                        <label class="custom-control-label" for="customCheck3">Ship to a different
-                                            address</label>
-                                    </div>
+
                                 </div>
+                            </div>
+                            {{#product}}
+                            <!-- 카카오 페이-->
+                            <div class="cart-btn mt-100">
+
+                                <input type="hidden" name="productPrice" value={{productPrice}}>
+                                <input type="hidden" name="productName" value={{productName}}>
+                                <input type="hidden" name="productid" value={{productId}}>
+                                <button class="btn amado-btn w-100">결제하기</button>
+
                             </div>
                         </form>
 
                     </div>
                 </div>
-                {{#product}}
+
+
+
                 <div class="col-12 col-lg-4">
                     <div class="cart-summary">
                         <h5>Cart Total</h5>
@@ -94,33 +104,14 @@
                             <li><span>total:</span> <span></span></li>
                         </ul>
 
-                        <div class="payment-method">
-                            <!-- Cash on delivery -->
-                            <div class="custom-control custom-checkbox mr-sm-2">
-                                <input type="checkbox" class="custom-control-input" id="cod" checked>
-                                <label class="custom-control-label" for="cod">Cash on Delivery</label>
-                            </div>
-                            <!-- Paypal -->
-                            <div class="custom-control custom-checkbox mr-sm-2">
-                                <input type="checkbox" class="custom-control-input" id="paypal">
-                                <label class="custom-control-label" for="paypal">Paypal <img class="ml-15"
-                                                                                             src="/static/img/core-img/paypal.png"
-                                                                                             alt=""></label>
-                            </div>
-                        </div>
 
-                        <!-- 카카오 페이-->
-                        <div class="cart-btn mt-100">
-                        <form method="post" action="/payment/kakaoPay">
-                            <input type="hidden" name="productPrice" value={{productPrice}}>
-                            <input type="hidden" name="productName" value={{productName}}>
-                            <input type="hidden" name="productid" value={{productId}}>
-                            <button class="btn amado-btn w-100">Checkout</button>
-                        </form>
-                        </div>
+
+
                     </div>
                 </div>
                 {{/product}}
+                {{/sessionUser}}
+
             </div>
         </div>
     </div>

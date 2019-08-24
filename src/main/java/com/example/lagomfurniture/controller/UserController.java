@@ -84,15 +84,10 @@ public class UserController {
         String access_Token = kakao.getAccessToken(code);
         HashMap<String, Object> userInfo = kakao.getUserInfo(access_Token);
         System.out.println("login Controller : " + userInfo);
-        User KakaoUser = new User(userInfo.get("email").toString(),"kakao",userInfo.get("nickname").toString(),"",userInfo.get("profile_thumbnail_image").toString());
-        userRepository.save(KakaoUser);
 
         // 클라이언트의 이메일이 존재할 때 세션에 해당 이메일과 토큰 등록
-        if (userInfo.get("email") != null) {
-//            session.setAttribute("userId", userInfo.get("email"));
-            session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, KakaoUser);
-        }
         return "redirect:/";
+
     }
 
 
@@ -104,7 +99,5 @@ public class UserController {
         session.removeAttribute("userId");
         return "redirect:/";
     }
-
-
 
 }

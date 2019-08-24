@@ -1,20 +1,19 @@
 package com.example.lagomfurniture.service.kakaopay;
 
+import com.example.lagomfurniture.model.OrderDetail;
 import com.example.lagomfurniture.model.OrderInfo;
 import com.example.lagomfurniture.model.Product;
 import com.example.lagomfurniture.model.User;
+import com.example.lagomfurniture.repository.OrderDetailRepository;
 import com.example.lagomfurniture.repository.OrderInfoRepository;
 import com.example.lagomfurniture.repository.ProductRepository;
 import com.example.lagomfurniture.repository.UserRepository;
 import com.example.lagomfurniture.utils.HttpSessionUtils;
-import com.google.gson.JsonArray;
-import net.minidev.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
@@ -24,12 +23,11 @@ import javax.servlet.http.HttpSession;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
- *  2019.08.10. 19:14
- *  Ja Eun
+ * 2019.08.10. 19:14
+ * Ja Eun
  */
 @Service
 public class KakaoPay {
@@ -44,11 +42,12 @@ public class KakaoPay {
     private ProductRepository productRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private OrderDetailRepository orderDetailRepository;
 
     public String kakaoPayReady(String productPrice, String productName, String productId, String sessionedUser) {
 
         System.out.println("KAKAOPAY READY price: " + productPrice + "name: " + productName + "productId" + productId + "sessionedUser" + sessionedUser);
-
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -89,7 +88,7 @@ public class KakaoPay {
             System.out.println("kakaoPayReady : " + kakaoPayReadyVO);
             System.out.println("kakaoPayReady : " + body);
 
-            System.out.println("이동되는 주소 : "+ kakaoPayReadyVO.getNext_redirect_pc_url());
+            System.out.println("이동되는 주소 : " + kakaoPayReadyVO.getNext_redirect_pc_url());
             //Redircet URL 불러와 결제가 완료되면 주소로 v가게 됨
             return kakaoPayReadyVO.getNext_redirect_pc_url();
 
@@ -106,21 +105,34 @@ public class KakaoPay {
 
 
     /**
-     *  결제 정보 받아오기
-     *  결제 완료 후 받아오는 pg_token과 tid 필수
+     * 결제 정보 받아오기
+     * 결제 완료 후 받아오는 pg_token과 tid 필수
      */
 
-    public KakaoPayApprovalVO kakaoPayInfo(String pg_token,HttpSession session) {
+    public KakaoPayApprovalVO kakaoPayInfo(String pg_token, HttpSession session) {
         System.out.println(":::::::::::::::KakaoPayInfoVO::::::::::::::");
 
         //세션에 저장된 PRODUCT_SESSION_ID
         String productSessionId = (String) session.getAttribute(HttpSessionUtils.PRODUCT_SESSION_ID);
         System.out.println("KakaoPayApprovalVO PRODUCT_SESSION_ID 확인 :  " + productSessionId);
 
+        //세션에 저장된 PRODUCT_SESSION_NAME
+//        String productSessionName = (String) session.getAttribute(HttpSessionUtils.PRODUCT_SESSION_NAME);
+//        System.out.println("KakaoPayApprovalVO PRODUCT_SESSION_ID 확인 :  " + productSessionName);
+
         //세션에 저장된 USER_SESSION_KEY
         User user = (User) session.getAttribute(HttpSessionUtils.USER_SESSION_KEY);
-        String sessionUser = user.getUserEmail();
-        System.out.println("kakaoPayApprovalVO 세션 유저 확인 : " + sessionUser);
+        String sessionUserEmail = user.getUserEmail();
+
+        //세션에 저장된 ORDER_DETAIL
+        OrderDetail orderDetail = (OrderDetail) session.getAttribute(HttpSessionUtils.ORDER_DETAIL);
+
+
+        System.out.println("kakaoPayApprovalVO 세션 유저 확인 : " + sessionUserEmail);
+
+        User user1 = userRepository.findByUserEmail(sessionUserEmail);
+        Long userid = user1.getId();
+        System.out.println("kakaoPayApprovalVO 세션 유저 확인 아이디 : " + userid);
 
         //HEADER
         RestTemplate restTemplate = new RestTemplate();
@@ -135,13 +147,13 @@ public class KakaoPay {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
         params.add("cid", "TC0ONETIME");
         params.add("tid", kakaoPayReadyVO.getTid());
+//        params.add("payload", productThumbnail);
+//        params.add("item_code",productCategory);
         params.add("partner_order_id", productSessionId);
-        params.add("partner_user_id",sessionUser);
+        params.add("partner_user_id", sessionUserEmail);
         params.add("pg_token", pg_token);
 
-//        params.add("total_amount","10000"); //ready 금액과 동일해야 함 !!!!!!!!!!! 여기 고쳐야 돼!!!!!!!!!!!!!!!!1
-//        System.out.println("kakaopayreadyvo partner_order_id : " + kakaoPayReadyVO.getPartner_orderid());
-//        System.out.println("kakaopayreadyvo partner_user_id : " + kakaoPayReadyVO.getPartner_userid());
+
 
         HttpEntity<MultiValueMap<String, String>> body = new HttpEntity<MultiValueMap<String, String>>(params, headers);
 
@@ -157,32 +169,36 @@ public class KakaoPay {
 
             System.out.println("kakaoPayApprovalVO name : " + kakaoPayApprovalVO.getItem_name());
             System.out.println("kakaoPayApprovalVO approved_at : " + kakaoPayApprovalVO.getApproved_at());
-            System.out.println("kakaoPayApprovalVO price : " + kakaoPayApprovalVO.getPayload());
             System.out.println("kakaoPayApprovalVO orderid : " + kakaoPayApprovalVO.getPartner_order_id()); //ProducctId
             System.out.println("kakaoPayApprovalVO userid : " + kakaoPayApprovalVO.getPartner_user_id()); //SessionedUser
             System.out.println("kakaoPayApprovalVO quantity : " + kakaoPayApprovalVO.getQuantity());
-            System.out.println("kakaoPayApprovalVO body : " +body.toString());
+            System.out.println("kakaoPayApprovalVO category: " + kakaoPayApprovalVO.getItem_code()); //category
+            System.out.println("kakaoPayApprovalVO body : " + body.toString());
 
             String price = kakaoPayApprovalVO.getAmount().getTotal().toString();
-            System.out.println("kakaoPayApprovalVO amount" + price);
+            System.out.println("kakaoPayApprovalVO amount: " + price);
+            System.out.println("kakaoPayApprovalVO 한 건당 고유번호 Tid : " + kakaoPayApprovalVO.getTid());
 
-            String name = kakaoPayApprovalVO.getItem_name();
             String quantity = kakaoPayApprovalVO.getQuantity().toString();
+            String ordernum = kakaoPayApprovalVO.getTid();
 
             //Date to String
             String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(kakaoPayApprovalVO.getCreated_at());
 
-            //DB INSERT
-            OrderInfo orderinfo = new OrderInfo(currentDate,price,quantity);
+            //결제 내용과 상품 번호 JOIN TABLE
+            List<Product> productList = productRepository.findByProductId(Long.parseLong(kakaoPayApprovalVO.getPartner_order_id()));
 
-            System.out.println("order" + orderinfo);
-            orderinfoRepository.save(orderinfo); //order_info save data
+            //결제 내용과 유저 이메일 JOIN TABLE
+            List<User> orderUser = userRepository.findByid(userid);
+            System.out.println("order유저 확인 : " + orderUser);
 
+            //ORDER INFO DB INSERT
+            OrderInfo orderInfo_product_user = new OrderInfo(ordernum, currentDate, price, quantity, productList, orderUser);
+            orderinfoRepository.save(orderInfo_product_user);
 
-//            List<Product> productList = productRepository.findByProductId(Long.parseLong(kakaoPayApprovalVO.getPartner_order_id()));
-//
-//            OrderInfo orderInfo2 = new OrderInfo(currentDate,price,quantity,productList);
-//            model.addAttribute("orderinfo",orderInfo2);
+            //ORDER DETAIL DB INSERT
+            orderDetailRepository.save(orderDetail);
+
 
             return kakaoPayApprovalVO;
 

@@ -43,5 +43,10 @@ public class Product {
     public Product() {
     }
 
+    @ManyToMany(mappedBy="products")
+    private List<User> users = new ArrayList<User>();
+
+    @ManyToMany(mappedBy="products")
+    private List<OrderDetail> orderdetails = new ArrayList<OrderDetail>();
 
 }
