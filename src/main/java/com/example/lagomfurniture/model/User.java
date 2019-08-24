@@ -63,13 +63,6 @@ public class User {
     }
 
     // 회원가입
-    public User(String userEmail, String nickname, String password) {
-        this.userEmail = userEmail;
-        this.nickname = nickname;
-        this.password = password;
-    }
-
-    // SNS 회원가입
     @Builder
     public User(String userEmail, String platform, String nickname, String password, String profileImage) {
         this.userEmail = userEmail;
@@ -101,5 +94,16 @@ public class User {
         return Input_password.equals(password);
     }
 
+      @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userEmail='" + userEmail + '\'' +
+                ", platform='" + platform + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", password='" + password + '\'' +
+                ", profileImage='" + profileImage + '\'' +
+                '}';
+    }
 
 }
