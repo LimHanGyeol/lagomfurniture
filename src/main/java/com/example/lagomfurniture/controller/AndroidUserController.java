@@ -19,7 +19,7 @@ public class AndroidUserController {
     @Autowired
     private UserRepository userRepository;
 
-    private SnsUserService snsUserService;
+    SnsUserService snsUserService;
 
     // 안드로이드 로그인
     @PostMapping("/login_android")
@@ -45,6 +45,7 @@ public class AndroidUserController {
 
         System.out.println("Android Login 성공");
         loginResult.put("response","success");
+        loginResult.put("resultcode","1");
         loginResult.put("nickname",user.getNickname());
         loginResult.put("user_email",user.getUserEmail());
         loginResult.put("profile_Image",user.getProfileImage());

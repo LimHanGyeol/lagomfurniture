@@ -22,6 +22,7 @@ public class ProductController {
     public String bed(Model model) {
         String CATEGORY = "bed";
         List<Product> productList = productRepository.findByProductCategory(CATEGORY);
+        System.out.println("product list : " + productList);
         model.addAttribute("product",productList);
 
         return "view/shop/product_category/product_bed";
