@@ -46,19 +46,19 @@
                                 <td id="reviewNo" align="center" style="width: 7%;">
                                     <h6>{{reviewNo}}</h6>
                                 </td>
-                                <td class="cart_product_img" id="review_thumbnail" align="center" style="width: 16%;">
+                                <td class="cart_product_img" id="reviewThumbnail" align="center" style="width: 16%;">
                                     <a href="#"><img style="width: 80px; height: 80px;"
                                                      src="/static/img/product/{{reviewThumbnail}}"
                                                      alt="Product"></a>
                                 </td>
                                 <td class="cart_product_desc" id="reviewTitle" align="left" style="width: 50%;">
-                                    <a href="#"><h6>{{reviewTitle}}</h6></a>
+                                    <a href="/review/review_read/{{reviewNo}}"><h6>{{reviewTitle}}</h6></a>
                                 </td>
                                 <td class="price" id="reviewWriter" align="center" style="width: 10%;">
-                                    <h6>{{reviewWriter}}</h6>
+                                    <h6>{{reviewWriter.nickname}}</h6>
                                 </td>
-                                <td class="qty" id="reviewData" align="center" style="width: 10%;">
-                                    <h6>{{reviewData}}</h6>
+                                <td class="qty" id="reviewDate" align="center" style="width: 10%;">
+                                    <h6>{{reviewDate}}</h6>
                                 </td>
                                 <td id="reviewHit" align="center" style="width: 7%;">
                                     <h6>{{reviewHit}}</h6>
@@ -72,7 +72,7 @@
 
             </div>
             <div class="cart-btn mt-15" align="right">
-                <a href="#" class="btn amado-btn" style="width: 80px;">write</a>
+                <a href="/review/review_write" class="btn amado-btn" style="width: 80px;">write</a>
             </div>
 
             <div>

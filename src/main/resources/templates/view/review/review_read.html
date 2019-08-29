@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- 헤더 인클루드 -->
+    {{> view/include/html_head}}
+    <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+</head>
+
+<body>
+<!-- 검색창 인클루드 -->
+{{> view/include/html_search}}
+
+<!-- ##### Main Content Wrapper Start ##### -->
+<div class="main-content-wrapper d-flex clearfix">
+    <!-- 모바일 네비게이션 인클루드 -->
+    {{> view/include/html_mobile_nav}}
+
+    <!-- 왼쪽 네비게이션 메뉴 인클루드 -->
+    {{> view/include/html_nav_menu}}
+
+    <div class="cart-table-area section-padding-100">
+        <div class="container-fluid">
+
+            <div class="row">
+                {{#review}}
+                <div class="col-12 col-lg-8">
+                    <div class="checkout_details_area mt-50 clearfix">
+
+                        <div class="cart-title">
+                            <h2>Review Read</h2>
+                        </div>
+                        <!--<div style="width: 80px; height: 3px; background-color: #fbb710; margin-bottom: 15px; display: block;"></div>-->
+
+                        <div class="row">
+                            <h4 style="margin-left: 15px; margin-top: 15px;">제목 : </h4>
+                            <div class="col-8 mb-3">
+                                <h4 id="reviewTitle" style="margin-left: 15px; margin-top: 15px;">{{reviewTitle}}</h4>
+                            </div>
+
+                            <div class="col-12 mb-3">
+                                <div style="width: 50%; height: 3px; background-color: #fbb710; margin-bottom: 15px; display: block;"></div>
+
+                                <h6 style="margin-top: 15px;">내용 </h6>
+                                <!--<textarea name="reviewContent" class="form-control w-100" id="reviewContent" cols="30"-->
+                                          <!--rows="10"-->
+                                          <!--placeholder="내용을 입력해 주세요."></textarea>-->
+                                <div>
+                                    {{reviewContent}}
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="cart-btn mt-15" align="right">
+                            <a href="/review/review_read/{{reviewNo}}/review_update"><button class="btn amado-btn" style="width: 80px;">수정</button></a>
+                        </div>
+                        <form action="/review/review_read/{{reviewNo}}/review_delete" method="post">
+                        <div class="cart-btn mt-15" align="right">
+                            <input type="hidden" value="delete">
+                            <button class="btn amado-btn" style="width: 80px;">삭제</button>
+                        </div>
+                        </form>
+                        <div class="cart-btn mt-15" align="right">
+                            <button class="btn amado-btn" style="width: 80px;">목록</button>
+                        </div>
+
+
+                    </div>
+                </div>
+                {{/review}}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ##### Main Content Wrapper End ##### -->
+
+<!-- 푸터 인클루드 -->
+{{> view/include/html_footer}}
+</body>
+
+</html>

@@ -17,6 +17,8 @@ public class Review {
     @Column(name = "review_no")
     private Long reviewNo;
 
+    //@ManyToOne(targetEntity = Product.class)
+    //@JoinColumn(name = "review_thumbnail")
     @Column(name = "review_thumbnail")
     private String reviewThumbnail;
 
@@ -26,25 +28,33 @@ public class Review {
     @Column(name = "review_content")
     private String reviewContent;
 
-    @Column(name = "review_writer")
-    private String reviewWriter;
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(name = "review_writer")
+    //@Column(name = "review_writer")
+    private User reviewWriter;
 
     @Column(name = "review_date")
-    private String reviewData;
+    private String reviewDate;
 
     @Column(name = "review_hit")
     private int reviewHit;
 
     public Review() {
     }
-
-    public Review(String reviewThumbnail, String reviewTitle, String reviewContent, String reviewWriter, String reviewData, int reviewHit) {
+    // review create
+    public Review(String reviewThumbnail, String reviewTitle, String reviewContent, User reviewWriter, String reviewDate, int reviewHit) {
         this.reviewThumbnail = reviewThumbnail;
         this.reviewTitle = reviewTitle;
         this.reviewContent = reviewContent;
         this.reviewWriter = reviewWriter;
-        this.reviewData = reviewData;
+        this.reviewDate = reviewDate;
         this.reviewHit = reviewHit;
+    }
+
+    // review update
+    public void reviewUpdate(String reviewTitle, String reviewContent) {
+        this.reviewTitle = reviewTitle;
+        this.reviewContent = reviewContent;
     }
 
     @Override
@@ -54,8 +64,8 @@ public class Review {
                 ", reviewThumbnail='" + reviewThumbnail + '\'' +
                 ", reviewTitle='" + reviewTitle + '\'' +
                 ", reviewContent='" + reviewContent + '\'' +
-                ", reviewWriter='" + reviewWriter + '\'' +
-                ", reviewData='" + reviewData + '\'' +
+                ", reviewWriter=" + reviewWriter +
+                ", reviewDate='" + reviewDate + '\'' +
                 ", reviewHit=" + reviewHit +
                 '}';
     }

@@ -5,5 +5,5 @@ import com.example.lagomfurniture.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    Review findByReviewNo(Long reviewNo);
+    //Review findByReviewNo(Long reviewNo);
 }
