@@ -30,14 +30,14 @@ public class Review {
     @Column(name = "review_image1")
     private String reviewImage;
 
-
+    @Transient      // DB 에 칼럼 만들지 않음.
+    private MultipartFile[] fileDatas;  // 다중 파일 업로드를 위해 배열로 설정
 
     @Column(name = "review_content")
     private String reviewContent;
 
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "review_writer")
-    //@Column(name = "review_writer")
     private User reviewWriter;
 
     @Column(name = "review_date")
@@ -73,11 +73,11 @@ public class Review {
                 ", reviewThumbnail='" + reviewThumbnail + '\'' +
                 ", reviewTitle='" + reviewTitle + '\'' +
                 ", reviewImage='" + reviewImage + '\'' +
+                ", fileDatas=" + Arrays.toString(fileDatas) +
                 ", reviewContent='" + reviewContent + '\'' +
                 ", reviewWriter=" + reviewWriter +
                 ", reviewDate='" + reviewDate + '\'' +
                 ", reviewHit=" + reviewHit +
                 '}';
     }
-
 }
