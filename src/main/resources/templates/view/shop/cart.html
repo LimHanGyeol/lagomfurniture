@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <!-- 헤더 인클루드 -->
-    {{> view/include/html_head}}
+    <th:block th:replace="view/include/html_head"></th:block>
 </head>
 
 <body>
-    <!-- 검색창 인클루드 -->
-    {{> view/include/html_search}}
+<!-- 검색창 인클루드 -->
+<th:block th:replace="view/include/html_search"></th:block>
 
     <!-- ##### Main Content Wrapper Start ##### 메인 컨텐츠 래퍼 시작-->
     <div class="main-content-wrapper d-flex clearfix">
 
         <!-- 모바일 네비게이션 인클루드 -->
-        {{> view/include/html_mobile_nav}}
+        <th:block th:replace="view/include/html_mobile_nav"></th:block>
 
         <!-- 왼쪽 네비게이션 메뉴 인클루드 -->
-        {{> view/include/html_nav_menu}}
+        <th:block th:replace="view/include/html_nav_menu"></th:block>
 
         <div class="cart-table-area section-padding-100">
             <div class="container-fluid">
@@ -124,8 +124,8 @@
     </div>
     <!-- ##### Main Content Wrapper End ##### -->
 
-    <!-- 푸터 인클루드 -->
-    {{> view/include/html_footer}}
+<!-- 푸터 인클루드 -->
+<footer th:replace="view/include/html_footer"></footer>
 </body>
 
 </html>

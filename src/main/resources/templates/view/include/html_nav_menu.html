@@ -1,5 +1,5 @@
 <!-- Header Area Start -->
-<header class="header-area clearfix">
+<header class="header-area clearfix" xmlns:th="http://www.thymeleaf.org">
     <!-- Close Icon -->
     <div class="nav-close">
         <i class="fa fa-close" aria-hidden="true"></i>
@@ -11,13 +11,9 @@
     <!-- Amado Nav -->
     <nav class="amado-nav">
         <ul>
-            {{^sessionUser}}
-            <li class="active"><a href="/users/loginForm">Log in</a></li>
-            {{/sessionUser}}
-            {{#sessionUser}}
-            <li class="active"><h6 id="user">{{sessionUser.nickname}} 님 환영 합니다.</h6>
-            <li><a href="/users/logout">Log out</a></li>
-            {{/sessionUser}}
+            <li th:if="${session.sessionUser==null}" class="active"><a href="/users/loginForm">Log in</a></li>
+            <li th:if="${session.sessionUser!=null}" th:text="${session.sessionUser.getNickname()+' 님 환영 합니다.'}" class="active"><h6 id="user"> 님 환영 합니다.</h6>
+            <li th:if="${session.sessionUser!=null}"><a href="/users/logout">Log out</a></li>
             <!--<li><a href="/">Home</a></li>-->
             <li><a href="/product/bed">Product</a></li>
             <!--<li><a href="/product">Product Detail</a></li> 상품 상세보기 화면임-->

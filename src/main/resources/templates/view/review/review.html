@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <!-- 헤더 인클루드 -->
-    {{> view/include/html_head}}
+    <th:block th:replace="view/include/html_head"></th:block>
 </head>
 
 <body>
 <!-- 검색창 인클루드 -->
-{{> view/include/html_search}}
+<th:block th:replace="view/include/html_search"></th:block>
 
 <!-- ##### Main Content Wrapper Start ##### 메인 컨텐츠 래퍼 시작-->
 <div class="main-content-wrapper d-flex clearfix">
 
     <!-- 모바일 네비게이션 인클루드 -->
-    {{> view/include/html_mobile_nav}}
+    <th:block th:replace="view/include/html_mobile_nav"></th:block>
 
     <!-- 왼쪽 네비게이션 메뉴 인클루드 -->
-    {{> view/include/html_nav_menu}}
+    <th:block th:replace="view/include/html_nav_menu"></th:block>
 
     <div class="review-table-area section-padding-100">
         <div class="container-fluid">
@@ -39,8 +39,9 @@
                                 <th scope="col" align="center" style="width: 10%;">DATE</th>
                                 <th scope="col" align="center" style="width: 7%;">HIT</th>
                             </tr>
+
                             </thead>
-                            {{#review}}
+                            {{#reviewlist}}
                             <tbody style="border-bottom: 1px solid #EBEBEB;">
                             <tr>
                                 <td id="reviewNo" align="center" style="width: 7%;">
@@ -64,7 +65,7 @@
                                     <h6>{{reviewHit}}</h6>
                                 </td>
                             </tr>
-                            {{/review}}
+                            {{/reviewlist}}
                             </tbody>
                         </table>
                     </div>
@@ -72,7 +73,7 @@
 
             </div>
             <div class="cart-btn mt-15" align="right">
-                <a href="/review/review_write" class="btn amado-btn" style="width: 80px;">write</a>
+                <a href="/review/review_create" class="btn amado-btn" style="width: 80px;">write</a>
             </div>
 
             <div>
@@ -81,17 +82,8 @@
 
                     <nav aria-label="navigation">
                         <ul class="pagination justify-content-end mt-15" style="width: 66%;">
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">4</a></li>
-                            <li class="page-item"><a class="page-link" href="#">5</a></li>
-                            <li class="page-item"><a class="page-link" href="#">6</a></li>
-                            <li class="page-item"><a class="page-link" href="#">7</a></li>
-                            <li class="page-item"><a class="page-link" href="#">8</a></li>
-                            <li class="page-item"><a class="page-link" href="#">9</a></li>
-                            <li class="page-item"><a class="page-link" href="#">10</a></li>
-                            <li class="page-item"><a class="page-link" href="#">></a></li>
+                            <li class="page-item active"><a class="page-link" href="#">0</a></li>
+                            <li class="page-item active"><a class="page-link" href="#">0</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -106,7 +98,7 @@
 <!-- ##### Main Content Wrapper End ##### -->
 
 <!-- 푸터 인클루드 -->
-{{> view/include/html_footer}}
+<footer th:replace="view/include/html_footer"></footer>
 </body>
 
 </html>

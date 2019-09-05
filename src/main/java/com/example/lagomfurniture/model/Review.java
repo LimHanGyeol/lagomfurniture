@@ -2,8 +2,10 @@ package com.example.lagomfurniture.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.util.Arrays;
 
 @Entity
 @Getter
@@ -25,6 +27,11 @@ public class Review {
     @Column(name = "review_title")
     private String reviewTitle;
 
+    @Column(name = "review_image1")
+    private String reviewImage;
+
+
+
     @Column(name = "review_content")
     private String reviewContent;
 
@@ -41,14 +48,16 @@ public class Review {
 
     public Review() {
     }
+
     // review create
-    public Review(String reviewThumbnail, String reviewTitle, String reviewContent, User reviewWriter, String reviewDate, int reviewHit) {
+    public Review(String reviewThumbnail, String reviewTitle, String reviewContent, User reviewWriter, String reviewDate, int reviewHit, String reviewImage) {
         this.reviewThumbnail = reviewThumbnail;
         this.reviewTitle = reviewTitle;
         this.reviewContent = reviewContent;
         this.reviewWriter = reviewWriter;
         this.reviewDate = reviewDate;
         this.reviewHit = reviewHit;
+        this.reviewImage = reviewImage;
     }
 
     // review update
@@ -63,10 +72,12 @@ public class Review {
                 "reviewNo=" + reviewNo +
                 ", reviewThumbnail='" + reviewThumbnail + '\'' +
                 ", reviewTitle='" + reviewTitle + '\'' +
+                ", reviewImage='" + reviewImage + '\'' +
                 ", reviewContent='" + reviewContent + '\'' +
                 ", reviewWriter=" + reviewWriter +
                 ", reviewDate='" + reviewDate + '\'' +
                 ", reviewHit=" + reviewHit +
                 '}';
     }
+
 }

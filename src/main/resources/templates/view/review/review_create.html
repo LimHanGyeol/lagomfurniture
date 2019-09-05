@@ -4,6 +4,7 @@
 <head>
     <!-- 헤더 인클루드 -->
     <th:block th:replace="view/include/html_head"></th:block>
+    <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 </head>
 
 <body>
@@ -22,28 +23,30 @@
         <div class="container-fluid">
 
             <div class="row">
-                {{#review}}
+
                 <div class="col-12 col-lg-8">
                     <div class="checkout_details_area mt-50 clearfix">
 
                         <div class="cart-title">
-                            <h2>Review Update</h2>
+                            <h2>Review Write</h2>
                         </div>
                         <!--<div style="width: 80px; height: 3px; background-color: #fbb710; margin-bottom: 15px; display: block;"></div>-->
-                        <form method="post" action="/review/review_read/{{reviewNo}}/review_update">
+                        <form th:object="${imageUpload}" method="post" action="/review/review_save"
+                              enctype="multipart/form-data">
+
                             <div class="row">
                                 <h4 style="margin-left: 15px; margin-top: 15px;">제목 </h4>
                                 <div class="col-8 mb-3">
                                     <input type="text" class="form-control" id="reviewTitle" name="reviewTitle"
-                                           value="{{reviewTitle}}">
+                                           placeholder="제목을 입력 하세요">
                                 </div>
                                 <div class="col-12 mb-3">
                                     <div style="width: 50%; height: 3px; background-color: #fbb710; margin-bottom: 15px; display: block;"></div>
-
+                                    <input th:field="*{fileDatas}" type="file" id="file" name="file"/>
                                     <h6 style="margin-top: 15px;">글쓰기 </h6>
                                     <textarea name="reviewContent" class="form-control w-100" id="reviewContent"
                                               cols="30" rows="10"
-                                    >{{reviewContent}}</textarea>
+                                              placeholder="내용을 입력해 주세요."></textarea>
                                 </div>
 
                                 <!--<div class="cart-btn mt-15" align="right">-->
@@ -53,15 +56,13 @@
 
                             </div>
                             <div class="cart-btn mt-15" align="right">
-
-                                <button class="btn amado-btn" style="width: 80px;">write</button>
-
+                                <button type="submit" class="btn amado-btn" style="width: 80px;">write</button>
                             </div>
                         </form>
 
                     </div>
                 </div>
-                {{/review}}
+
             </div>
         </div>
     </div>
