@@ -34,6 +34,7 @@ public class ReviewController {
 
     File serverFile;
 
+    /**
     // 리뷰 페이지 이동
     @GetMapping("")
     public String reviewPage(Model model) {
@@ -41,6 +42,19 @@ public class ReviewController {
         System.out.println("review list : " + reviewList);
         model.addAttribute("reviewlist", reviewList);
         return "view/review/review";
+    }
+    **/
+
+    private int returnIntValue(String stringToInt) {
+        return Integer.parseInt(stringToInt);
+    }
+
+    // 리뷰 페이지 이동 및 페이징 구현
+    @GetMapping("")
+    public String reviewPaging(@RequestParam(value = "pageNum", defaultValue = "1")String pageNum, Model model) {
+        String page = reviewService.reviewList(returnIntValue(pageNum),model);
+
+        return page;
     }
 
     // 리뷰 작성 페이지로 이동
@@ -142,11 +156,12 @@ public class ReviewController {
                     uploadedFiles.add(serverFile);
                     User sessionedUser = HttpSessionUtils.getUserSession(session);
                     String reviewImagePath = String.valueOf(serverFile);
-
+                    //for (int i = 0; i < 100; i++) {
                     Review createReview = new Review("lamp/davian_pendant_thumnail.jpg", reviewTitle, reviewContent, sessionedUser, "2019.08.29.", 1, reviewImagePath);
                     model.addAttribute("uploadedFiles", uploadedFiles);
                     model.addAttribute("failedFiles", failedFiles);
                     reviewRepository.save(createReview);
+                    //}
                 } catch (Exception e) {
                     System.out.println("Review Create - Error Create File : " + filename);
                     failedFiles.add(filename);
