@@ -55,14 +55,14 @@
                                                          alt="Product"></a>
                                     </td>
                                     <td class="cart_product_desc" id="reviewTitle" align="left" style="width: 50%;">
-                                        <a href="/review/review_read/{{reviewNo}}"><h6
-                                                th:text="${review.reviewTitle}"></h6></a>
+                                        <a th:href="'/review/review_read/'+${review.reviewNo}"><h6 th:text="${review.reviewTitle}"></h6></a>
+<!--                                        <a th:onclick="|javascript:getReviewRead('${review.reviewNo}')|"><h6 th:text="${review.reviewTitle}"></h6></a>-->
                                     </td>
                                     <td class="price" id="reviewWriter" align="center" style="width: 10%;">
                                         <h6 th:text="${review.reviewWriter.nickname}"></h6>
                                     </td>
                                     <td class="qty" id="reviewDate" align="center" style="width: 10%;">
-                                        <h6 th:text="${review.reviewDate}"></h6>
+                                        <h6 th:text="${review.getFormattedCreateDate()}"></h6>
                                     </td>
                                     <td id="reviewHit" align="center" style="width: 7%;">
                                         <h6 th:text="${review.reviewHit}"></h6>
@@ -80,6 +80,7 @@
                 <a href="/review/review_create" class="btn amado-btn" style="width: 80px;">write</a>
             </div>
             <!-- Pagination -->
+            <th:block th:if="${reviewlist.size()!=0}">
             <div class="row">
                 <div class="col-12">
                     <nav aria-label="navigation">
@@ -90,12 +91,15 @@
                                 <li th:if="${pageMaker.getCurrentPage()==pageNum}" class="page-item active"><a th:text="${pageNum}" th:onclick="|javascript:page('${pageNum}')|" class="page-link"></a></li>
                                 <li th:if="${pageMaker.getCurrentPage()!=pageNum}" class="page-item"><a th:text="${pageNum}" th:onclick="|javascript:page('${pageNum}')|" class="page-link"></a></li>
                             </th:block>
+                            <th:block th:if="${pageMaker.totalcount>100}">
                             <li class="page-item"><a th:if="${pageMaker.isNext()}" style="text-decoration: none;" th:onclick="|javascript:page('${pageMaker.getEndPage()+1}')|" class="page-link">>></a></li>
                             <li class="page-item"><a th:if="${pageMaker.isNext()}" style="text-decoration: none;" th:onclick="|javascript:page('${pageMaker.getLastPage()}')|" class="page-link">Last</a></li>
+                            </th:block>
                         </ul>
                     </nav>
                 </div>
             </div>
+            </th:block>
 
         </div>
     </div>
@@ -104,6 +108,9 @@
 <script>
     function page(pageNum) {
         location.href = "/review?pageNum=" + pageNum;
+    }
+    function getReviewRead(reviewNo) {
+        location.href="/review/review_read?reviewNo="+reviewNo;
     }
 </script>
 

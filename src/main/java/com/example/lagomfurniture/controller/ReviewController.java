@@ -3,7 +3,7 @@ package com.example.lagomfurniture.controller;
 import com.example.lagomfurniture.model.Review;
 import com.example.lagomfurniture.model.User;
 import com.example.lagomfurniture.repository.ReviewRepository;
-import com.example.lagomfurniture.service.ReviewService;
+import com.example.lagomfurniture.service.reviewservice.ReviewListService;
 import com.example.lagomfurniture.utils.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,25 +25,14 @@ public class ReviewController {
 
     @Autowired
     private ReviewRepository reviewRepository;
-
     @Autowired
-    private ReviewService reviewService;
+    private ReviewListService reviewListService;
+
 
     @Value("${file.upload.directory}")
     String uploadRootPath;
 
     File serverFile;
-
-    /**
-    // 리뷰 페이지 이동
-    @GetMapping("")
-    public String reviewPage(Model model) {
-        List<Review> reviewList = reviewRepository.findAll();
-        System.out.println("review list : " + reviewList);
-        model.addAttribute("reviewlist", reviewList);
-        return "view/review/review";
-    }
-    **/
 
     private int returnIntValue(String stringToInt) {
         return Integer.parseInt(stringToInt);
@@ -51,9 +40,8 @@ public class ReviewController {
 
     // 리뷰 페이지 이동 및 페이징 구현
     @GetMapping("")
-    public String reviewPaging(@RequestParam(value = "pageNum", defaultValue = "1")String pageNum, Model model) {
-        String page = reviewService.reviewList(returnIntValue(pageNum),model);
-
+    public String reviewPaging(@RequestParam(value = "pageNum", defaultValue = "1") String pageNum, Model model) {
+        String page = reviewListService.reviewList(returnIntValue(pageNum), model);
         return page;
     }
 
@@ -83,16 +71,19 @@ public class ReviewController {
             return "view/users/redirect";
         }
 
-
         return this.imageUpload(file, reviewTitle, reviewContent, session, model, review);
     }
 
-    // 리뷰 게시물 페이지로 이동
+
+    // 리뷰 게시물 상세보기 페이지로 이동
     @GetMapping("/review_read/{reviewNo}")
     public String reviewReadPage(@PathVariable Long reviewNo, Model model) {
         Review review = reviewRepository.findById(reviewNo).get();
+        review.reviewHitIncrease();   // 조회수 증가
         model.addAttribute("review", review);
         System.out.println("model : " + model);
+        System.out.println("review Hit : " + review.getReviewHit());
+        reviewRepository.save(review);
 
         return "view/review/review_read";
     }
@@ -100,7 +91,15 @@ public class ReviewController {
     // 리뷰 게시물 수정 페이지로 이동
     @GetMapping("/review_read/{reviewNo}/review_update")
     public String reviewUpdatePage(@PathVariable Long reviewNo, Model model, HttpSession session) {
+        // 세션이 없으면 로그인 페이지로 가기
+        if (!HttpSessionUtils.isLoginUserSession(session)) {    // 로그인 정보가 없으면 로그인 화면으로 이동
+            return "view/users/redirect";
+        }
+        User loginUser = HttpSessionUtils.getUserSession(session);
         Review review = reviewRepository.findById(reviewNo).get();
+        if (!review.isSameWriter(loginUser)) {
+            return "view/users/redirect";
+        }
         // result 예외 처리 해야함
         model.addAttribute("review", review);
         return "view/review/review_update";
@@ -109,6 +108,7 @@ public class ReviewController {
     // 리뷰 게시물 수정하기
     @PostMapping("/review_read/{reviewNo}/review_update")
     public String reviewUpdate(@PathVariable Long reviewNo, String reviewTitle, String reviewContent, Model model, HttpSession session) {
+
         Review review = reviewRepository.findById(reviewNo).get();
         // result 예외처리 해야함
         // update textarea 에서 엔터 눌르고 저장해도 줄바꿈 인식 안됨
@@ -155,9 +155,12 @@ public class ReviewController {
 
                     uploadedFiles.add(serverFile);
                     User sessionedUser = HttpSessionUtils.getUserSession(session);
-                    String reviewImagePath = String.valueOf(serverFile);
+
+                    String imagePath = "/static/reviewimage/";
+                    String reviewImagePath = imagePath + filename;
+                    System.out.println("review imagePath : " + reviewImagePath);
                     //for (int i = 0; i < 100; i++) {
-                    Review createReview = new Review("lamp/davian_pendant_thumnail.jpg", reviewTitle, reviewContent, sessionedUser, "2019.08.29.", 1, reviewImagePath);
+                    Review createReview = new Review("lamp/davian_pendant_thumnail.jpg", reviewTitle, reviewContent, sessionedUser, 1, reviewImagePath);
                     model.addAttribute("uploadedFiles", uploadedFiles);
                     model.addAttribute("failedFiles", failedFiles);
                     reviewRepository.save(createReview);

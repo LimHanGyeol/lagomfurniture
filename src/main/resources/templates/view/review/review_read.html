@@ -22,7 +22,6 @@
         <div class="container-fluid">
 
             <div class="row">
-                {{#review}}
                 <div class="col-12 col-lg-8">
                     <div class="checkout_details_area mt-50 clearfix">
 
@@ -34,7 +33,7 @@
                         <div class="row">
                             <h4 style="margin-left: 15px; margin-top: 15px;">제목 : </h4>
                             <div class="col-8 mb-3">
-                                <h4 id="reviewTitle" style="margin-left: 15px; margin-top: 15px;">{{reviewTitle}}</h4>
+                                <h4 id="reviewTitle" style="margin-left: 15px; margin-top: 15px;" th:text="${review.reviewTitle}"></h4>
                             </div>
 
                             <div class="col-12 mb-3">
@@ -45,16 +44,17 @@
                                           <!--rows="10"-->
                                           <!--placeholder="내용을 입력해 주세요."></textarea>-->
                                 <div>
-                                    {{reviewContent}}
+                                    <img style="width: 200px; height: 200px;" th:src="${review.reviewImage}">
                                 </div>
+                                <div th:text="${review.reviewContent}"></div>
                             </div>
 
                         </div>
 
                         <div class="cart-btn mt-15" align="right">
-                            <a href="/review/review_read/{{reviewNo}}/review_update"><button class="btn amado-btn" style="width: 80px;">수정</button></a>
+                            <a th:href="'/review/review_read/'+${review.reviewNo}+'/review_update'"><button class="btn amado-btn" style="width: 80px;">수정</button></a>
                         </div>
-                        <form action="/review/review_read/{{reviewNo}}/review_delete" method="post">
+                        <form th:action="'/review/review_read/'+${review.reviewNo}+'/review_delete'" method="post">
                         <div class="cart-btn mt-15" align="right">
                             <input type="hidden" value="delete">
                             <button class="btn amado-btn" style="width: 80px;">삭제</button>
@@ -67,7 +67,6 @@
 
                     </div>
                 </div>
-                {{/review}}
             </div>
         </div>
     </div>

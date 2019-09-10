@@ -22,7 +22,6 @@
         <div class="container-fluid">
 
             <div class="row">
-                {{#review}}
                 <div class="col-12 col-lg-8">
                     <div class="checkout_details_area mt-50 clearfix">
 
@@ -35,15 +34,18 @@
                                 <h4 style="margin-left: 15px; margin-top: 15px;">제목 </h4>
                                 <div class="col-8 mb-3">
                                     <input type="text" class="form-control" id="reviewTitle" name="reviewTitle"
-                                           value="{{reviewTitle}}">
+                                           th:value="${review.reviewTitle}">
                                 </div>
                                 <div class="col-12 mb-3">
                                     <div style="width: 50%; height: 3px; background-color: #fbb710; margin-bottom: 15px; display: block;"></div>
 
                                     <h6 style="margin-top: 15px;">글쓰기 </h6>
-                                    <textarea name="reviewContent" class="form-control w-100" id="reviewContent"
-                                              cols="30" rows="10"
-                                    >{{reviewContent}}</textarea>
+                                    <div>
+                                        <img style="width: 200px; height: 200px;" th:src="${review.reviewImage}">
+                                        <textarea name="reviewContent" class="form-control w-100" id="reviewContent"
+                                                  cols="30" rows="10" th:text="${review.reviewContent}"
+                                        ></textarea>
+                                    </div>
                                 </div>
 
                                 <!--<div class="cart-btn mt-15" align="right">-->
@@ -61,7 +63,6 @@
 
                     </div>
                 </div>
-                {{/review}}
             </div>
         </div>
     </div>

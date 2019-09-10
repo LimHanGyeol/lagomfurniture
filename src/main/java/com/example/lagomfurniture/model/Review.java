@@ -5,6 +5,8 @@ import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 @Entity
@@ -41,7 +43,7 @@ public class Review {
     private User reviewWriter;
 
     @Column(name = "review_date")
-    private String reviewDate;
+    private LocalDateTime reviewDate;
 
     @Column(name = "review_hit")
     private int reviewHit;
@@ -50,12 +52,12 @@ public class Review {
     }
 
     // review create
-    public Review(String reviewThumbnail, String reviewTitle, String reviewContent, User reviewWriter, String reviewDate, int reviewHit, String reviewImage) {
+    public Review(String reviewThumbnail, String reviewTitle, String reviewContent, User reviewWriter, int reviewHit, String reviewImage) {
         this.reviewThumbnail = reviewThumbnail;
         this.reviewTitle = reviewTitle;
         this.reviewContent = reviewContent;
         this.reviewWriter = reviewWriter;
-        this.reviewDate = reviewDate;
+        this.reviewDate = LocalDateTime.now();
         this.reviewHit = reviewHit;
         this.reviewImage = reviewImage;
     }
@@ -64,6 +66,25 @@ public class Review {
     public void reviewUpdate(String reviewTitle, String reviewContent) {
         this.reviewTitle = reviewTitle;
         this.reviewContent = reviewContent;
+    }
+
+    // review Date Format
+    public String getFormattedCreateDate() {
+        if (reviewDate == null) {
+            return "";
+        }
+        return reviewDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd. HH:mm"));
+    }
+
+    // review security
+    public boolean isSameWriter(User loginUser) {
+        return this.reviewWriter.equals(loginUser);
+    }
+
+    // review Hit + 1
+    public int reviewHitIncrease() {
+        int reviewHitIncrease = this.reviewHit += 1;
+        return reviewHitIncrease;
     }
 
     @Override
@@ -80,4 +101,6 @@ public class Review {
                 ", reviewHit=" + reviewHit +
                 '}';
     }
+
+
 }

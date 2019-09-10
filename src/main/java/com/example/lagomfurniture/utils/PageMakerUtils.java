@@ -12,7 +12,7 @@ public class PageMakerUtils {
     private int lastblock;// "마지막" 페이지 블록
     private int firstPage = 1;// 전체 게시물의 첫페이지
     private int lastPage;// 전체 게시물의 마지막 페이지
-    private int currentPage;
+    private int currentPage; // 현재 페이지
 
 
     public void prevnext(int pagenum) {
