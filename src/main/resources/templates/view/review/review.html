@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- 헤더 인클루드 -->
+    <th:block th:replace="view/include/html_head"></th:block>
+
+</head>
+
+<body>
+<!-- 검색창 인클루드 -->
+<th:block th:replace="view/include/html_search"></th:block>
+
+<!-- ##### Main Content Wrapper Start ##### 메인 컨텐츠 래퍼 시작-->
+<div class="main-content-wrapper d-flex clearfix">
+
+    <!-- 모바일 네비게이션 인클루드 -->
+    <th:block th:replace="view/include/html_mobile_nav"></th:block>
+
+    <!-- 왼쪽 네비게이션 메뉴 인클루드 -->
+    <th:block th:replace="view/include/html_nav_menu"></th:block>
+
+    <div class="review-table-area section-padding-100">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-lg-12">
+                    <div class="review-title mt-50">
+                        <h2>Review</h2>
+                    </div>
+
+                    <div class="review-table clearfix">
+                        <table class="table table-responsive">
+                            <thead>
+                            <tr>
+                                <!--<th></th>-->
+                                <th scope="col" align="center" style="width: 7%;">NO</th>
+                                <th scope="col" align="center" style="width: 16%;">ITEM</th>
+                                <th scope="col" align="center" style="width: 50%;">TITLE</th>
+                                <th scope="col" align="center" style="width: 10%;">NICKNAME</th>
+                                <th scope="col" align="center" style="width: 10%;">DATE</th>
+                                <th scope="col" align="center" style="width: 7%;">HIT</th>
+                            </tr>
+
+                            </thead>
+                            <th:block th:each="review:${reviewlist}">
+                                <tbody style="border-bottom: 1px solid #EBEBEB;">
+                                <tr>
+                                    <td id="reviewNo" align="center" style="width: 7%;">
+                                        <h6 th:text="${review.reviewNo}"></h6>
+                                    </td>
+                                    <td class="cart_product_img" id="reviewThumbnail" align="center"
+                                        style="width: 16%;">
+                                        <a href="#"><img style="width: 80px; height: 80px;"
+                                                         src="/static/img/product/bed/ainaline_elder_bed_thumnail.jpg"
+                                                         alt="Product"></a>
+                                    </td>
+                                    <td class="cart_product_desc" id="reviewTitle" align="left" style="width: 50%;">
+                                        <a th:href="'/review/review_read/'+${review.reviewNo}"><h6 th:text="${review.reviewTitle}"></h6></a>
+<!--                                        <a th:onclick="|javascript:getReviewRead('${review.reviewNo}')|"><h6 th:text="${review.reviewTitle}"></h6></a>-->
+                                    </td>
+                                    <td class="price" id="reviewWriter" align="center" style="width: 10%;">
+                                        <h6 th:text="${review.reviewWriter.nickname}"></h6>
+                                    </td>
+                                    <td class="qty" id="reviewDate" align="center" style="width: 10%;">
+                                        <h6 th:text="${review.getFormattedCreateDate()}"></h6>
+                                    </td>
+                                    <td id="reviewHit" align="center" style="width: 7%;">
+                                        <h6 th:text="${review.reviewHit}"></h6>
+                                    </td>
+                                </tr>
+                            </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="cart-btn mt-15" align="right">
+                <a href="/review/review_create" class="btn amado-btn" style="width: 80px;">write</a>
+            </div>
+            <!-- Pagination -->
+            <th:block th:if="${reviewlist.size()!=0}">
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="navigation">
+                        <ul class="pagination justify-content-end mt-15" style="width: 66%;">
+                            <li class="page-item"><a th:if="${pageMaker.isPrev()}" style="text-decoration: none;" th:onclick="|javascript:page('${pageMaker.getFirstPage()}')|" class="page-link">First</a></li>
+                            <li class="page-item"><a th:if="${pageMaker.isPrev()}" style="text-decoration: none;" th:onclick="|javascript:page('${pageMaker.getStartPage()-10}')|" class="page-link"><<</a></li>
+                            <th:block th:each="pageNum:${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+                                <li th:if="${pageMaker.getCurrentPage()==pageNum}" class="page-item active"><a th:text="${pageNum}" th:onclick="|javascript:page('${pageNum}')|" class="page-link"></a></li>
+                                <li th:if="${pageMaker.getCurrentPage()!=pageNum}" class="page-item"><a th:text="${pageNum}" th:onclick="|javascript:page('${pageNum}')|" class="page-link"></a></li>
+                            </th:block>
+                            <th:block th:if="${pageMaker.totalcount>100}">
+                            <li class="page-item"><a th:if="${pageMaker.isNext()}" style="text-decoration: none;" th:onclick="|javascript:page('${pageMaker.getEndPage()+1}')|" class="page-link">>></a></li>
+                            <li class="page-item"><a th:if="${pageMaker.isNext()}" style="text-decoration: none;" th:onclick="|javascript:page('${pageMaker.getLastPage()}')|" class="page-link">Last</a></li>
+                            </th:block>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            </th:block>
+
+        </div>
+    </div>
+</div>
+<!-- ##### Main Content Wrapper End ##### -->
+<script>
+    function page(pageNum) {
+        location.href = "/review?pageNum=" + pageNum;
+    }
+    function getReviewRead(reviewNo) {
+        location.href="/review/review_read?reviewNo="+reviewNo;
+    }
+</script>
+
+<!-- 푸터 인클루드 -->
+<footer th:replace="view/include/html_footer"></footer>
+</body>
+
+</html>

@@ -14,7 +14,7 @@ public class MenuController {
 
     @GetMapping("/cart")
     public String cart() {
-        return "cart";
+        return "view/shop/cart";
     }
 
 }

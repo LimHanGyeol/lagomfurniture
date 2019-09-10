@@ -1,22 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <!-- 상품 상세보기 화면-->
 <head>
-    {{> view/include/html_head}}
+    <!-- 헤더 인클루드 -->
+    <th:block th:replace="view/include/html_head"></th:block>
 </head>
 
 <body>
 <!-- 검색창 인클루드 -->
-{{> view/include/html_search}}
+<th:block th:replace="view/include/html_search"></th:block>
 
 <!-- ##### Main Content Wrapper Start ##### -->
 <div class="main-content-wrapper d-flex clearfix">
 
     <!-- 모바일 네비게이션 인클루드 -->
-    {{> view/include/html_mobile_nav}}
+    <th:block th:replace="view/include/html_mobile_nav"></th:block>
 
     <!-- 왼쪽 네비게이션 메뉴 인클루드 -->
-    {{> view/include/html_nav_menu}}
+    <th:block th:replace="view/include/html_nav_menu"></th:block>
 
     <!-- Product Details Area Start -->
     <div class="single-product-area section-padding-100 clearfix">
@@ -147,7 +148,7 @@
 <!-- ##### Main Content Wrapper End ##### -->
 
 <!-- 푸터 인클루드 -->
-{{> view/include/html_footer}}
+<footer th:replace="view/include/html_footer"></footer>
 </body>
 
 </html>
