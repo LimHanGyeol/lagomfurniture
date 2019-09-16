@@ -84,7 +84,7 @@
 
             <!--상품 썸네일 시작-->
             <div class="row">
-                {{#product}}
+                <th:block th:each="product:${productlist}">
 
                 <!-- Single Product Area -->
                 <div class="col-12 col-sm-6 col-md-12 col-xl-6">
@@ -92,7 +92,7 @@
 
                         <!-- Product Image -->
                         <div class="product-img">
-                            <img src="/static/img/product/chair/{{productThumnail}}" alt="">
+                            <img th:src="'/static/img/product/'+${product.productCategory}+'/'+${product.productThumnail}" alt="">
                             <!-- Hover Thumb -->
                             <!--<img class="hover-img" src="/static/img/product-img/product2.jpg" alt="">-->
                         </div>
@@ -102,9 +102,9 @@
                             <!-- Product Meta Data -->
                             <div class="product-meta-data">
                                 <div class="line"></div>
-                                <p class="product-price">{{productPrice}}</p>
+                                <p class="product-price" th:text="${product.productPrice}"></p>
                                 <a href="../product_detail.html">
-                                    <h6>{{productName}}</h6>
+                                    <h6 th:text="${product.productName}"></h6>
                                 </a>
                             </div>
                             <!-- Ratings & Cart -->
@@ -126,7 +126,7 @@
                     </div>
                 </div>
 
-                {{/product}}
+                </th:block>
                 <!--로우-->
             </div>
 

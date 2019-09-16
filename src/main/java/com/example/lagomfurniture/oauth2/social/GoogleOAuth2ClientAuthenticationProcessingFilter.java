@@ -3,7 +3,9 @@ package com.example.lagomfurniture.oauth2.social;
 import com.example.lagomfurniture.model.GoogleApiLoginData;
 import com.example.lagomfurniture.model.User;
 import com.example.lagomfurniture.service.SnsDataCertificationService;
+import com.example.lagomfurniture.utils.UserPasswordHashClass;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +25,8 @@ public class GoogleOAuth2ClientAuthenticationProcessingFilter extends OAuth2Clie
 
     private ObjectMapper mapper = new ObjectMapper();
     private SnsDataCertificationService snsDataCertificationService;
+    @Autowired
+    private UserPasswordHashClass userPasswordHashClass;
 
 
 
@@ -42,7 +46,8 @@ public class GoogleOAuth2ClientAuthenticationProcessingFilter extends OAuth2Clie
         final GoogleApiLoginData googleApiLoginData = mapper.convertValue(details, GoogleApiLoginData.class);
         googleApiLoginData.setAccessToken(accessToken); // access token 정보도 저장
         //final UserConnection userConnection = UserConnection.valueOf(googleApiLoginData); // UserConnection를 googleApiLoginData 기반으로 생성
-        User user = new User(googleApiLoginData.getUser_email(), "google",googleApiLoginData.getNickname(),googleApiLoginData.getPassword(),googleApiLoginData.getProfile_image());
+        String hashedPassword = userPasswordHashClass.getSHA256(googleApiLoginData.getPassword());
+        User user = new User(googleApiLoginData.getUser_email(), "google",googleApiLoginData.getNickname(),hashedPassword,googleApiLoginData.getProfile_image());
         System.out.println("google login user 를 User 객체에 매핑 : " + user) ;
         final UsernamePasswordAuthenticationToken authenticationToken = snsDataCertificationService.doAuthentication(user); // SocialService를 이용해서 인증 절차 진행
         System.out.println("인증 절차 진행 완료");
