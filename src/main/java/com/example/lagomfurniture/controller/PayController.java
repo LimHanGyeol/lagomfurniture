@@ -28,10 +28,6 @@ public class PayController {
     private KakaoPay kakaopay;
     @Autowired
     private ProductRepository productRepository;
-    @Autowired
-    private OrderInfoRepository orderInfoRepository;
-    @Autowired
-    private UserRepository userRepository;
 
     KakaoPayApprovalVO kakaoPayApprovalVO;
 

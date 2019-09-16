@@ -10,11 +10,5 @@ public class MenuController {
     @GetMapping("")
     public String home() {
         return "index";
-    }
-
-    @GetMapping("/cart")
-    public String cart() {
-        return "view/shop/cart";
-    }
-
+    }       
 }
