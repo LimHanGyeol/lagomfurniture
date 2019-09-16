@@ -23,7 +23,7 @@ public class ProductController {
         String CATEGORY = "bed";
         List<Product> productList = productRepository.findByProductCategory(CATEGORY);
         System.out.println("product list : " + productList);
-        model.addAttribute("product",productList);
+        model.addAttribute("productlist",productList);
 
         return "view/shop/product_category/product_bed";
     }
@@ -33,7 +33,7 @@ public class ProductController {
     public String chest(Model model) {
         String CATEGORY = "chest";
         List<Product> productList = productRepository.findByProductCategory(CATEGORY);
-        model.addAttribute("product",productList);
+        model.addAttribute("productlist",productList);
         return "view/shop/product_category/product_chest";
     }
 
@@ -42,23 +42,23 @@ public class ProductController {
     public String table(Model model) {
         String CATEGORY = "table";
         List<Product> productList = productRepository.findByProductCategory(CATEGORY);
-        model.addAttribute("product",productList);
+        model.addAttribute("productlist",productList);
         return "view/shop/product_category/product_table";
     }
     // 카테고리 의자
-    @GetMapping("/chair")
+    @GetMapping("/{productCategory}")
     public String chair(Model model) {
         String CATEGORY = "chair";
         List<Product> productList = productRepository.findByProductCategory(CATEGORY);
-        model.addAttribute("product",productList);
+        model.addAttribute("productlist",productList);
         return "view/shop/product_category/product_chair";
     }
     // 카테고리 조명
-    @GetMapping("/lamp")
-    public String lamp(Model model) {
-        String CATEGORY = "lamp";
-        List<Product> productList = productRepository.findByProductCategory(CATEGORY);
-        model.addAttribute("product",productList);
-        return "view/shop/product_category/product_lamp";
-    }
+//    @GetMapping("/lamp")
+//    public String lamp(Model model) {
+//        String CATEGORY = "lamp";
+//        List<Product> productList = productRepository.findByProductCategory(CATEGORY);
+//        model.addAttribute("productlist",productList);
+//        return "view/shop/product_category/product_lamp";
+//    }
 }

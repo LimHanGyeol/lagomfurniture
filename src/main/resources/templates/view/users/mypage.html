@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- 헤더 인클루드 -->
+    <th:block th:replace="view/include/html_head"></th:block>
+</head>
+
+<body>
+<!-- 검색창 인클루드 -->
+<th:block th:replace="view/include/html_search"></th:block>
+
+<!-- ##### Main Content Wrapper Start ##### 메인 컨텐츠 래퍼 시작-->
+<div class="main-content-wrapper d-flex clearfix">
+
+    <!-- 모바일 네비게이션 인클루드 -->
+    <th:block th:replace="view/include/html_mobile_nav"></th:block>
+
+    <!-- 왼쪽 네비게이션 메뉴 인클루드 -->
+    <th:block th:replace="view/include/html_nav_menu"></th:block>
+
+    <div class="mypage-table-area section-padding-100">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-lg-12">
+                    <div class="mypage-title mt-50">
+                        <h2>My Page</h2>
+                    </div>
+
+                    <div class="col-12 col-lg-5" style="padding-left: 0;">
+                        <div class="mypage-summary">
+                            <h5>My Information</h5>
+                            <ul class="summary-table">
+                                <li><span>Email :</span> <span th:text="${session.sessionUser.userEmail}"></span></li>
+                                <li><span>Nickname :</span> <span th:text="${session.sessionUser.nickname}"></span></li>
+                            </ul>
+                            <div class="cart-btn mt-15">
+                                <a href="cart.html" class="btn amado-btn w-100">Modify My Info</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+
+                <!--쇼핑리스트 시작-->
+                <h6 style="float: bottom; margin-left: 15px; margin-top: 20px;">My Shopping List</h6>
+                <!--쇼핑리스트 테이블-->
+                <div class="cart-table clearfix col-12 col-lg-12 mt-30">
+                    <table class="table table-responsive">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="cart_product_img">
+                                <a href="#"><img src="/static/img/bg-img/cart1.jpg" alt="Product"></a>
+                            </td>
+                            <td class="cart_product_desc">
+                                <h5>White Modern Chair</h5>
+                            </td>
+                            <td class="price">
+                                <span>$130</span>
+                            </td>
+                            <td class="qty">
+                                <div class="qty-btn d-flex">
+                                    <p>Qty</p>
+                                    <div class="quantity">
+                                            <span class="qty-minus"
+                                                  onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;"><i
+                                                    class="fa fa-minus" aria-hidden="true"></i></span>
+                                        <input type="number" class="qty-text" id="qty" step="1" min="1" max="300"
+                                               name="quantity" value="1">
+                                        <span class="qty-plus"
+                                              onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i
+                                                class="fa fa-plus" aria-hidden="true"></i></span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!--리뷰 시작-->
+                <h6 style="margin-left: 15px;">My Review</h6>
+                <!--리뷰 테이블-->
+                <div class="cart-table clearfix col-12 col-lg-12 mt-15">
+                    <table class="table table-responsive">
+                        <thead>
+                        <tr>
+                            <!--<th></th>-->
+                            <th scope="col" align="center" style="width: 7%;">NO</th>
+                            <th scope="col" align="center" style="width: 16%;">ITEM</th>
+                            <th scope="col" align="center" style="width: 50%;">TITLE</th>
+                            <th scope="col" align="center" style="width: 10%;">NICKNAME</th>
+                            <th scope="col" align="center" style="width: 10%;">DATE</th>
+                            <th scope="col" align="center" style="width: 7%;">HIT</th>
+                        </tr>
+
+                        </thead>
+                        <th:block th:each="review:${reviewlist}">
+                            <tbody style="border-bottom: 1px solid #EBEBEB;">
+                            <tr>
+                                <td id="reviewNo" align="center" style="width: 7%;">
+                                    <h6 th:text="${review.reviewNo}"></h6>
+                                </td>
+                                <td class="cart_product_img" id="reviewThumbnail" align="center"
+                                    style="width: 16%;">
+                                    <a href="#"><img style="width: 80px; height: 80px;"
+                                                     src="/static/img/product/bed/ainaline_elder_bed_thumnail.jpg"
+                                                     alt="Product"></a>
+                                </td>
+                                <td class="cart_product_desc" id="reviewTitle" align="left" style="width: 50%;">
+                                    <a th:href="'/review/review_read/'+${review.reviewNo}"><h6 th:text="${review.reviewTitle}"></h6></a>
+                                    <!--                                        <a th:onclick="|javascript:getReviewRead('${review.reviewNo}')|"><h6 th:text="${review.reviewTitle}"></h6></a>-->
+                                </td>
+                                <td class="price" id="reviewWriter" align="center" style="width: 10%;">
+                                    <h6 th:text="${review.reviewWriter.nickname}"></h6>
+                                </td>
+                                <td class="qty" id="reviewDate" align="center" style="width: 10%;">
+                                    <h6 th:text="${review.getFormattedCreateDate()}"></h6>
+                                </td>
+                                <td id="reviewHit" align="center" style="width: 7%;">
+                                    <h6 th:text="${review.reviewHit}"></h6>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </th:block>
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ##### Main Content Wrapper End ##### -->
+
+<!-- 푸터 인클루드 -->
+<footer th:replace="view/include/html_footer"></footer>
+</body>
+
+</html>
