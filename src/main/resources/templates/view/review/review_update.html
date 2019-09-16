@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- 헤더 인클루드 -->
+    <th:block th:replace="view/include/html_head"></th:block>
+</head>
+
+<body>
+<!-- 검색창 인클루드 -->
+<th:block th:replace="view/include/html_search"></th:block>
+
+<!-- ##### Main Content Wrapper Start ##### -->
+<div class="main-content-wrapper d-flex clearfix">
+    <!-- 모바일 네비게이션 인클루드 -->
+    <th:block th:replace="view/include/html_mobile_nav"></th:block>
+
+    <!-- 왼쪽 네비게이션 메뉴 인클루드 -->
+    <th:block th:replace="view/include/html_nav_menu"></th:block>
+
+    <div class="cart-table-area section-padding-100">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12 col-lg-8">
+                    <div class="checkout_details_area mt-50 clearfix">
+
+                        <div class="cart-title">
+                            <h2>Review Update</h2>
+                        </div>
+                        <!--<div style="width: 80px; height: 3px; background-color: #fbb710; margin-bottom: 15px; display: block;"></div>-->
+                        <form method="post" action="/review/review_read/{{reviewNo}}/review_update">
+                            <div class="row">
+                                <h4 style="margin-left: 15px; margin-top: 15px;">제목 </h4>
+                                <div class="col-8 mb-3">
+                                    <input type="text" class="form-control" id="reviewTitle" name="reviewTitle"
+                                           th:value="${review.reviewTitle}">
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <div style="width: 50%; height: 3px; background-color: #fbb710; margin-bottom: 15px; display: block;"></div>
+
+                                    <h6 style="margin-top: 15px;">글쓰기 </h6>
+                                    <div>
+                                        <img style="width: 200px; height: 200px;" th:src="${review.reviewImage}">
+                                        <textarea name="reviewContent" class="form-control w-100" id="reviewContent"
+                                                  cols="30" rows="10" th:text="${review.reviewContent}"
+                                        ></textarea>
+                                    </div>
+                                </div>
+
+                                <!--<div class="cart-btn mt-15" align="right">-->
+                                <!--<input class="btn amado-btn" type="submit" value="write">-->
+                                <!--</div>-->
+
+
+                            </div>
+                            <div class="cart-btn mt-15" align="right">
+
+                                <button class="btn amado-btn" style="width: 80px;">write</button>
+
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ##### Main Content Wrapper End ##### -->
+
+<!-- 푸터 인클루드 -->
+<footer th:replace="view/include/html_footer"></footer>
+</body>
+
+</html>

@@ -4,6 +4,7 @@ import com.example.lagomfurniture.model.User;
 import com.example.lagomfurniture.repository.UserRepository;
 import com.example.lagomfurniture.service.KakaoAPI;
 import com.example.lagomfurniture.utils.HttpSessionUtils;
+import com.example.lagomfurniture.utils.UserPasswordHashClass;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserPasswordHashClass userPasswordHashClass;
 
     @Autowired
     private KakaoAPI kakao;
@@ -42,6 +46,9 @@ public class UserController {
     @PostMapping("/register") //form태그 action 에서 이동됨
     public String register(User user) {
         System.out.println("user: " + user);
+        String hashedPassword = userPasswordHashClass.getSHA256(user.getPassword());
+        user.setPassword(hashedPassword);
+
         userRepository.save(user); // Insert Query
         return "redirect:/users/loginForm"; // 회원가입 끝나면 로그인화면으로 이동
     }
@@ -50,20 +57,19 @@ public class UserController {
     @PostMapping("/login")
     public String login(String userEmail, String password, HttpSession session) {
         User user = userRepository.findByUserEmail(userEmail);
+        String hashedPassword = userPasswordHashClass.getSHA256(password);
         if (user == null) {
             System.out.println("등록된 아이디 없음");
             return "redirect:/users/loginForm";
         }
-        if (!user.messagePasswordCheck(password)) {
+        if (!user.messagePasswordCheck(hashedPassword)) {
             System.out.println("비밀번호 틀림");
             return "redirect:/users/loginForm";
         }
 
         //로그인 성공, 세션에 로그인 정보 저장
-        //session.setAttribute --- 세션에 속성값 설정
         session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
         System.out.println("세션에 저장되는 User정보 :  " + user);
-
         System.out.println("sessionid: " + session);
         return "redirect:/";
     }
