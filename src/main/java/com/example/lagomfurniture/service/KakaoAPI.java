@@ -89,7 +89,7 @@ public class KakaoAPI {
         return access_Token;
     }
 
-    public HashMap<String, Object> getUserInfo (String access_Token) {
+    public HashMap<String, Object> getUserInfo (String access_Token, HttpSession session) {
 
         //    요청하는 클라이언트마다 가진 정보가 다를 수 있기에 HashMap타입으로 선언
         HashMap<String, Object> userInfo = new HashMap<>();
@@ -142,6 +142,8 @@ public class KakaoAPI {
             } else {
                 //DB INSERT
                 userRepository.save(kakaoUser);
+                session.setAttribute(HttpSessionUtils.USER_SESSION_KEY,kakaoUser); //여기수정 8/28 19:48 파라미터 session 확인하기
+
             }
 
 

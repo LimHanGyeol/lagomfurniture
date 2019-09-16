@@ -12,9 +12,5 @@ public class MenuController {
         return "index";
     }
 
-    @GetMapping("/cart")
-    public String cart() {
-        return "cart";
-    }
 
 }

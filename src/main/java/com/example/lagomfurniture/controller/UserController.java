@@ -82,7 +82,7 @@ public class UserController {
     public String kakaologin(@RequestParam("code") String code, HttpSession session){
         System.out.println("code : " + code);
         String access_Token = kakao.getAccessToken(code);
-        HashMap<String, Object> userInfo = kakao.getUserInfo(access_Token);
+        HashMap<String, Object> userInfo = kakao.getUserInfo(access_Token,session);
         System.out.println("login Controller : " + userInfo);
 
         // 클라이언트의 이메일이 존재할 때 세션에 해당 이메일과 토큰 등록
