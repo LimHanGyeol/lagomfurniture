@@ -11,6 +11,4 @@ public class MenuController {
     public String home() {
         return "index";
     }
-
-
 }
