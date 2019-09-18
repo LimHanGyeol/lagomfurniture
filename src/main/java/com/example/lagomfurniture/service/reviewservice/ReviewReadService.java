@@ -18,15 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ReviewListService {
+public class ReviewReadService {
 
     @Autowired
     private ReviewRepository reviewRepository;
-
     @Autowired
     private PageMakerService pageMakerService;
 
-    public String reviewList(int pageNum, Model model) {
+    public String getReviewList(int pageNum, Model model) {     // 페이징
 
         PageMakerUtils pageMakerUtils = pageMakerService.generatePageMaker(pageNum, 10, reviewRepository);
 
@@ -36,7 +35,6 @@ public class ReviewListService {
         if (reviewPage.getSize() == 0) {
             model.addAttribute("reviewlist", new ArrayList<Review>());
             model.addAttribute("pageMaker", pageMakerUtils);
-
             return "view/review/review";
         }
         List<Review> reviewList = reviewPage.getContent();
@@ -47,6 +45,17 @@ public class ReviewListService {
         model.addAttribute("pageMaker", pageMakerUtils);
 
         return "view/review/review";
+    }
+
+    public String getReviewDetailPage(Long reviewNo, Model model) {
+        Review review = reviewRepository.findById(reviewNo).get();
+        review.reviewHitIncrease(); // 조회수 증가
+        model.addAttribute("review", review);
+        System.out.println("review Hit : " + review.getReviewHit());
+        System.out.println("model : " + model);
+        reviewRepository.save(review);
+
+        return "view/review/review_read";
     }
 
 }
