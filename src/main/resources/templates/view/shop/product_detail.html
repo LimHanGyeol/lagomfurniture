@@ -55,7 +55,7 @@
     <!-- Product Details Area Start -->
     <div class="single-product-area section-padding-100 clearfix">
         <div class="container-fluid">
-            {{#product}}
+            <th:block th:each="product:${product}">
             <div class="row">
 
                 <div class="col-12">
@@ -64,7 +64,8 @@
                             <!--<li class="breadcrumb-item"><a href="#">Home</a></li>-->
                             <li class="breadcrumb-item"><a href="#">PRODUCT</a></li>
                             <li class="breadcrumb-item"><a href="/product/bed">Bed</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{productName}}</li>
+<!--                            <li class="breadcrumb-item active" aria-current="page">{{productName}}</li>-->
+                            <li class="breadcrumb-item active" aria-current="page" th:text="${product.productName}"></li>
                         </ol>
                     </nav>
                 </div>
@@ -91,7 +92,9 @@
                             <div class="carousel-inner">
                                 <div class="carousel-item active">
                                     <a class="gallery_img" href="/static/img/product-img/pro-big-1.jpg">
-                                        <img class="d-block w-100" src="/static/img/product/bed/{{productThumnail}}"
+<!--                                        <img class="d-block w-100" src="/static/img/product/bed/{{productThumnail}}"-->
+<!--                                             alt="First slide">-->
+                                        <img class="d-block w-100" th:src="'/static/img/product/'+${product.productCategory}+'/'+${product.productThumnail}"
                                              alt="First slide">
                                     </a>
                                 </div>
@@ -122,10 +125,11 @@
                         <!-- Product Meta Data -->
                         <div class="product-meta-data">
                             <div class="line"></div>
-                            <p class="product-price">{{productPrice}}</p>
+                            <p class="product-price" th:text="${product.productPrice}"></p>
                             <a href="product_detail.html">
-                                <h6>{{productName}}</h6>
+                                <h6 th:text="${product.productName}"></h6>
                             </a>
+
                             <!-- Ratings & Review -->
                             <div class="ratings-review mb-15 d-flex align-items-center justify-content-between">
                                 <!--<div class="ratings">-->
@@ -144,11 +148,12 @@
                         </div>
 
                         <div class="short_overview my-5">
-                            <p>{{productExplained1}}</p>
+                            <p th:text="${product.productName}"></p>
+
                         </div>
 
                         <!<!-- GO TO PAY Form -->
-                        <form class="cart clearfix" method="post" action="/payment/{{id}}">
+                        <form th:object="${product}"  class="cart clearfix" method="post" th:action="'/payment/'+${product.productId}">
                             <div class="cart-btn d-flex mb-50">
                                 <p>Qty</p>
                                 <div class="quantity">
@@ -162,31 +167,32 @@
                                             class="fa fa-caret-up" aria-hidden="true"></i></span>
                                 </div>
                             </div>
-                            <input type="hidden" name="price" value={{productPrice}}>
-                            <input type="hidden" name="name" value={{productName}}>
-                            <button type="submit" name="addtocart" value="5" class="btn amado-btn">Payment</button>
+                            <input type="hidden" name="price" th:value="${product.productPrice}">
+                            <input type="hidden" name="name" th:value="${product.productName}">
+                            <button type="submit" value="5" class="btn amado-btn">Payment</button>
                         </form>
+
+                        <br>
 
                         <!-- Add To Cart Form-->
 
-                        <form class="cart clearfix" method="post" name="addcart" action="/cart/{{id}}" target="param" >
-                            <input type="hidden" name="category" value={{productCategory}}>
-                            <input type="hidden" name="thumnail" value={{productThumnail}}>
-                            <input type="hidden" name="price" value={{productPrice}}>
-                            <input type="hidden" name="name" value={{productName}}>
-                            {{#sessionUser}}
-                            <input type="hidden" name="sessionUser" value="{{sessionUser.nickname}}">
-                            {{/sessionUser}}
+                        <form class="cart clearfix" method="post" name="addcart" th:action="'/cart/'+${product.productId}" target="param" >
+                            <input type="hidden" name="category" th:value="${product.productCategory}">
+                            <input type="hidden" name="thumnail" th:value="${product.productThumnail}">
+                            <input type="hidden" name="price" th:value="${product.productPrice}">
+                            <input type="hidden" name="name" th:value="${product.productName}">
+<!--                            <input type="text" name="name" th:value="${product.productName}">-->
+                            <input type="hidden" name="sessionUser" th:if="${session.sessionUser!=null}" th:value="${session.sessionUser.getNickname()}">
                             <div>
                                 <button name="addtocart" value="5" class="btn amado-btn" onclick="addedCart()">Add to Cart</button>
                             </div>
                         </form>
-                        <!-- iframe 설정 form태그 submit시에 이동하지 않고 데이터만 이동하기 위함-->
+                        <!-- iframe 설정 form태그 submit시에 화면 전환 없이 데이터만 이동하기 위함-->
                         <iframe id="if" name="param"></iframe>
                     </div>
                 </div>
             </div>
-            {{/product}}
+            </th:block>
         </div>
 
 
