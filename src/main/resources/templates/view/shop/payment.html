@@ -32,11 +32,11 @@
                             <h2>결제하기</h2>
                         </div>
 
-                        {{#sessionUser}}
+<!--                        {{#sessionUser}}-->
                         <form method="post" action="/payment/kakaoPay">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <input type="text" class="form-control" id="userName" name="userName" value="{{sessionUser.nickname}}" placeholder="이름"
+                                    <input type="text" class="form-control" id="userName" name="userName" th:value="${session.sessionUser.getNickname()}" placeholder="이름"
                                            required>
                                 </div>
                                 <div class="col-12 mb-3">
@@ -79,13 +79,13 @@
 
                                 </div>
                             </div>
-                            {{#product}}
+<!--                            {{#product}}-->
                             <!-- 카카오 페이-->
                             <div class="cart-btn mt-100">
 
-                                <input type="hidden" name="productPrice" value={{productPrice}}>
-                                <input type="hidden" name="productName" value={{productName}}>
-                                <input type="hidden" name="productid" value={{productId}}>
+                                <input type="hidden" name="productPrice" th:value="${product.productPrice}">
+                                <input type="hidden" name="productName" th:value="${product.productName}">
+                                <input type="hidden" name="productid" th:value="${product.productId}">
                                 <button class="btn amado-btn w-100">결제하기</button>
 
                             </div>
@@ -100,7 +100,7 @@
                     <div class="cart-summary">
                         <h5>Cart Total</h5>
                         <ul class="summary-table">
-                            <li><span>subtotal:</span> <span>{{productPrice}}</span></li>
+                            <li><span>subtotal:</span> <span th:text="${product.productPrice}"></span></li>
                             <li><span>delivery:</span> <span>Free</span></li>
                             <li><span>total:</span> <span></span></li>
                         </ul>
@@ -110,8 +110,8 @@
 
                     </div>
                 </div>
-                {{/product}}
-                {{/sessionUser}}
+<!--                {{/product}}-->
+<!--                {{/sessionUser}}-->
 
             </div>
         </div>
