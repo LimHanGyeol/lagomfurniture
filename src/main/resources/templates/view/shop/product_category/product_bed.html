@@ -84,20 +84,16 @@
 
             <!--상품 썸네일 시작-->
             <div class="row">
-                <th:block th:each="product:${product}">
+                {{#product}}
                 <!-- Single Product Area -->
                 <div class="col-12 col-sm-6 col-md-12 col-xl-6">
                     <div class="single-product-wrapper">
 
                         <!-- Product Image -->
                         <div class="product-img">
-<!--                            <a href="/product/bed/{{productId}}">-->
-
-                            <a th:href="'/product/'+${product.productCategory}+'/'+${product.productId}">
-<!--                                <a th:href="'/product/bed/'+${product.productId}">-->
-<!--                            <img src="/static/img/product/bed/{{productThumnail}}" alt="">-->
-                                    <img th:src="'/static/img/product/bed/'+${product.productThumnail}" alt="">
-                                </a>
+                            <a href="/product/bed/{{productId}}">
+                            <img src="/static/img/product/bed/{{productThumnail}}" alt="">
+                            </a>
                             <!-- Hover Thumb -->
                             <!--<img class="hover-img" src="/static/img/product-img/product2.jpg" alt="">-->
                         </div>
@@ -107,9 +103,9 @@
                             <!-- Product Meta Data -->
                             <div class="product-meta-data">
                                 <div class="line"></div>
-                                <p class="product-price" th:text="${product.productPrice}"></p>
-                                <a th:href="'/product/bed/'+${product.productId}">
-                                    <h6 th:text="${product.productName}"></h6>
+                                <p class="product-price">{{productPrice}}</p>
+                                <a href="/product/bed/{{productId}}">
+                                    <h6>{{productName}}</h6>
                                 </a>
                             </div>
                             <!-- Ratings & Cart -->
@@ -129,35 +125,25 @@
                         </div>
                     </div>
                 </div>
-                </th:block>
+
+                {{/product}}
                 <!--로우-->
             </div>
-<!--            <div class="amado-btn">-->
-<!--                <a href="/product/testsave" >테스트</a>-->
-<!--            </div>-->
-            <!-- Pagination -->
-            <th:block th:if="${product.size()!=0}">
+
             <!--페이지네이션-->
             <div class="row">
                 <div class="col-12">
                     <!-- Pagination -->
                     <nav aria-label="navigation">
-                        <ul class="pagination justify-content-end mt-15" style="width: 66%;">
-                            <li class="page-item"><a th:if="${pageMaker.isPrev()}" style="text-decoration: none;" th:onclick="|javascript:page('${pageMaker.getFirstPage()}')|" class="page-link">First</a></li>
-                            <li class="page-item"><a th:if="${pageMaker.isPrev()}" style="text-decoration: none;" th:onclick="|javascript:page('${pageMaker.getStartPage()-5}')|" class="page-link"><<</a></li>
-                            <th:block th:each="pageNum:${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
-                                <li th:if="${pageMaker.getCurrentPage()==pageNum}" class="page-item active"><a th:text="${pageNum}" th:onclick="|javascript:page('${pageNum}')|" class="page-link"></a></li>
-                                <li th:if="${pageMaker.getCurrentPage()!=pageNum}" class="page-item"><a th:text="${pageNum}" th:onclick="|javascript:page('${pageNum}')|" class="page-link"></a></li>
-                            </th:block>
-                            <th:block th:if="${pageMaker.totalcount>30}">
-                                <li class="page-item"><a th:if="${pageMaker.isNext()}" style="text-decoration: none;" th:onclick="|javascript:page('${pageMaker.getEndPage()+1}')|" class="page-link">>></a></li>
-                                <li class="page-item"><a th:if="${pageMaker.isNext()}" style="text-decoration: none;" th:onclick="|javascript:page('${pageMaker.getLastPage()}')|" class="page-link">Last</a></li>
-                            </th:block>
+                        <ul class="pagination justify-content-end mt-50">
+                            <li class="page-item active"><a class="page-link" href="#">01.</a></li>
+                            <li class="page-item"><a class="page-link" href="#">02.</a></li>
+                            <li class="page-item"><a class="page-link" href="#">03.</a></li>
+                            <li class="page-item"><a class="page-link" href="#">04.</a></li>
                         </ul>
                     </nav>
                 </div>
             </div>
-            </th:block>
 
 
 
@@ -168,12 +154,6 @@
     </div>
 </div>
 <!-- ##### Main Content Wrapper End ##### -->
-<script>
-    function page(pageNum) {
-        location.href = "?pageNum=" + pageNum;
-    }
-
-</script>
 <!-- 푸터 인클루드 -->
 <footer th:replace="view/include/html_footer"></footer>
 </body>

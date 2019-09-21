@@ -26,6 +26,8 @@ public class PayController {
 
     @Autowired
     private KakaoPay kakaopay;
+    @Autowired
+    private ProductRepository productRepository;
 
     KakaoPayApprovalVO kakaoPayApprovalVO;
 
@@ -35,7 +37,7 @@ public class PayController {
         if (!HttpSessionUtils.isLoginUserSession(session)) {    // 로그인 정보가 없으면 로그인 화면으로 이동
             return "view/users/redirect";
         }
-        model.addAttribute("product", kakaopay.getProductInfoById(id));
+        model.addAttribute("product", productRepository.findById(id).get());
         return "view/shop/payment";
     }
 

@@ -44,10 +44,6 @@ public class KakaoPay {
     @Autowired
     private ProductIdRepository productIdRepository;
 
-    public Product getProductInfoById(Long productId){
-        return productIdRepository.findByProductId(productId);
-    }
-
     public String kakaoPayReady(String productPrice, String productName, String productId, String sessionedUser) {
 
         System.out.println("KAKAOPAY READY price: " + productPrice + "name: " + productName + "productId" + productId + "sessionedUser" + sessionedUser);

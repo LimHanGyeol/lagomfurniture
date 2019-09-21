@@ -4,45 +4,11 @@
 <head>
     <!-- 헤더 인클루드 -->
     <th:block th:replace="view/include/html_head"></th:block>
-
-    <!--    sweet alert-->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
-    <script type="text/javascript">
-        function addedCart(){
-            if(document.addcart.sessionUser ==null){
-                Swal.fire({
-                    type: 'error',
-                    text: '로그인 후 이용 해주세요.'
-                }).then(function (result) {
-                    if (result.value) {
-                        window.location = "/users/loginForm";
-                    }
-                })
-                return false;
-            }
-            Swal.fire(
-                '성공!',
-                '장바구니에 담았습니다.',
-                'success'
-            )
-        }
-
-    </script>
-    <style>
-        /* iframe을 숨기기 위한 css 화면, 이동하지 않고 데이터만 이동하기 위함*/
-        #if{
-            width: 0px;
-            height: 0px;
-            border: 0px;
-        }
-
-    </style>
 </head>
 
 <body>
 <!-- 검색창 인클루드 -->
 <th:block th:replace="view/include/html_search"></th:block>
-
 <!-- ##### Main Content Wrapper Start ##### -->
 <div class="main-content-wrapper d-flex clearfix">
 
@@ -91,7 +57,7 @@
                             <div class="carousel-inner">
                                 <div class="carousel-item active">
                                     <a class="gallery_img" href="/static/img/product-img/pro-big-1.jpg">
-                                        <img class="d-block w-100" src="/static/img/product/bed/{{productThumnail}}"
+                                        <img class="d-block w-100" src="/static/img/product/lamp/{{productThumnail}}"
                                              alt="First slide">
                                     </a>
                                 </div>
@@ -147,7 +113,7 @@
                             <p>{{productExplained1}}</p>
                         </div>
 
-                        <!<!-- GO TO PAY Form -->
+                        <!-- Add to Cart Form -->
                         <form class="cart clearfix" method="post" action="/payment/{{id}}">
                             <div class="cart-btn d-flex mb-50">
                                 <p>Qty</p>
@@ -167,25 +133,10 @@
                             <button type="submit" name="addtocart" value="5" class="btn amado-btn">Payment</button>
                         </form>
 
-                        <!-- Add To Cart Form-->
-
-                        <form class="cart clearfix" method="post" name="addcart" action="/cart/{{id}}" target="param" >
-                            <input type="hidden" name="category" value={{productCategory}}>
-                            <input type="hidden" name="thumnail" value={{productThumnail}}>
-                            <input type="hidden" name="price" value={{productPrice}}>
-                            <input type="hidden" name="name" value={{productName}}>
-                            {{#sessionUser}}
-                            <input type="hidden" name="sessionUser" value="{{sessionUser.nickname}}">
-                            {{/sessionUser}}
-                            <div>
-                                <button name="addtocart" value="5" class="btn amado-btn" onclick="addedCart()">Add to Cart</button>
-                            </div>
-                        </form>
-                        <!-- iframe 설정 form태그 submit시에 이동하지 않고 데이터만 이동하기 위함-->
-                        <iframe id="if" name="param"></iframe>
                     </div>
                 </div>
             </div>
+
             {{/product}}
         </div>
 

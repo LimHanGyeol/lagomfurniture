@@ -23,7 +23,6 @@ public class ProductDetailController {
         return "view/shop/product_detail";
     }
 
-
     // 수납 카테고리의 상세보기
     @GetMapping("/chest/{id}")
     public String chest_detail(@PathVariable Long id, Model model) {
@@ -49,7 +48,7 @@ public class ProductDetailController {
     @GetMapping("/lamp/{id}")
     public String lamp_detail(@PathVariable Long id, Model model) {
         model.addAttribute("product", productRepository.findById(id).get());
-        return "view/shop/product_detail";
+        return "view/shop/product_detail_lamp";
     }
 
 
