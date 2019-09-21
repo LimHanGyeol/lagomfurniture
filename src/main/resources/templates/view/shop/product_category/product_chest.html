@@ -105,7 +105,7 @@
                             <div class="product-meta-data">
                                 <div class="line"></div>
                                 <p class="product-price" th:text="${product.productPrice}"></p>
-                                <a href="../product_detail.html">
+                                <a th:href="'/product/'+${product.productCategory}+'/'+${product.productId}">
                                     <h6 th:text="${product.productName}"></h6>
                                 </a>
                             </div>

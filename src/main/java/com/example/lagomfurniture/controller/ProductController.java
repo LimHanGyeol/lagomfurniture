@@ -34,7 +34,6 @@ public class ProductController {
     // 카테고리 침대 : Product 의 메인 카테고리로 이동
     @GetMapping("/bed")
     public String bed(@RequestParam(value = "pageNum", defaultValue = "1") String pageNum, Model model) {
-//        String page = paginationService.productList(returnIntValue(pageNum),model);
         Page<Product> productPage = productPaginationService.getProductPage(returnIntValue(pageNum));
         ProductPageMakerUtils productPageMakerUtils = productPaginationService.generateProductPageMaker(returnIntValue(pageNum),6,productPage);
         List<Product> productList = productPaginationService.getProductList(returnIntValue(pageNum));
@@ -72,7 +71,7 @@ public class ProductController {
         return "view/shop/product_category/product_table";
     }
     // 카테고리 의자
-    @GetMapping("/{productCategory}")
+    @GetMapping("/chair")
     public String chair(Model model) {
         String CATEGORY = "chair";
         List<Product> productList = productService.getProductListByCategory(CATEGORY);

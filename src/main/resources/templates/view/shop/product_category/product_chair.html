@@ -29,10 +29,10 @@
             <!--  Catagories  -->
             <div class="catagories-menu">
                 <ul>
-                    <li><a href="/product/bed">Bed</a></li>
-                    <li><a href="/product/chest">Chest</a></li>
-                    <li><a href="/product/table">Table</a></li>
-                    <li class="active"><a href="/product/chair">Chair</a></li>
+                    <li><a href="/product/bed" name="bed" id="bed">Bed</a></li>
+                    <li><a href="/product/chest" name="Chest" id="Chest">Chest</a></li>
+                    <li><a href="/product/table" name="Table" id="Table">Table</a></li>
+                    <li class="active"><a href="/product/chair" name="Chair" id="Chair">Chair</a></li>
                     <li><a href="/product/lamp">Lamp</a></li>
                 </ul>
             </div>
@@ -105,7 +105,7 @@
                             <div class="product-meta-data">
                                 <div class="line"></div>
                                 <p class="product-price" th:text="${product.productPrice}"></p>
-                                <a href="../product_detail.html">
+                                <a th:href="'/product/'+${product.productCategory}+'/'+${product.productId}">
                                     <h6 th:text="${product.productName}"></h6>
                                 </a>
                             </div>
