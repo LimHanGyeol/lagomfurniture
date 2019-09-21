@@ -29,7 +29,7 @@
                             <h2>Review Update</h2>
                         </div>
                         <!--<div style="width: 80px; height: 3px; background-color: #fbb710; margin-bottom: 15px; display: block;"></div>-->
-                        <form method="post" action="/review/review_read/{{reviewNo}}/review_update">
+                        <form method="post" th:action="'/review/review_read/'+${reviewNo}+'/review_update'">
                             <div class="row">
                                 <h4 style="margin-left: 15px; margin-top: 15px;">제목 </h4>
                                 <div class="col-8 mb-3">

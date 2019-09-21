@@ -24,7 +24,6 @@ public class ProductController {
         List<Product> productList = productRepository.findByProductCategory(CATEGORY);
         System.out.println("product list : " + productList);
         model.addAttribute("productlist",productList);
-
         return "view/shop/product_category/product_bed";
     }
 
@@ -46,19 +45,20 @@ public class ProductController {
         return "view/shop/product_category/product_table";
     }
     // 카테고리 의자
-    @GetMapping("/{productCategory}")
+    @GetMapping("/chair")
     public String chair(Model model) {
         String CATEGORY = "chair";
         List<Product> productList = productRepository.findByProductCategory(CATEGORY);
         model.addAttribute("productlist",productList);
         return "view/shop/product_category/product_chair";
+    ///{productCategory}
     }
     // 카테고리 조명
-//    @GetMapping("/lamp")
-//    public String lamp(Model model) {
-//        String CATEGORY = "lamp";
-//        List<Product> productList = productRepository.findByProductCategory(CATEGORY);
-//        model.addAttribute("productlist",productList);
-//        return "view/shop/product_category/product_lamp";
-//    }
+    @GetMapping("/lamp")
+    public String lamp(Model model) {
+        String CATEGORY = "lamp";
+        List<Product> productList = productRepository.findByProductCategory(CATEGORY);
+        model.addAttribute("productlist",productList);
+        return "view/shop/product_category/product_lamp";
+    }
 }

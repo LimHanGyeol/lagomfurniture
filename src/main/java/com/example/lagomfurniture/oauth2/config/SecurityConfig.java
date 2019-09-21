@@ -43,8 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/resources/**", "/", "/**", "/google**", "/login**").permitAll()
                 .anyRequest().authenticated()
                 .and().exceptionHandling()  // 오픈카톡 예제로 적용한것
-                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/")) // 오픈카톡 예제로 적용한것
-                // 조졸두 씨 예제로 적용한 것
+                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/"))
                 .and().logout().logoutSuccessUrl("/").permitAll()
                 .and().headers().frameOptions().sameOrigin()
                 .and().csrf().disable()
