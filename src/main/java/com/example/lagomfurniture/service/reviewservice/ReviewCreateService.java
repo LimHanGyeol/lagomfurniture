@@ -1,5 +1,6 @@
 package com.example.lagomfurniture.service.reviewservice;
 
+import com.example.lagomfurniture.model.FileUpload;
 import com.example.lagomfurniture.model.Review;
 import com.example.lagomfurniture.model.User;
 import com.example.lagomfurniture.repository.ReviewRepository;
@@ -24,17 +25,9 @@ public class ReviewCreateService {
     private ReviewRepository reviewRepository;
 
     @Value("${file.upload.directory}")
-    String uploadRootPath;
+    private String uploadRootPath;
 
-    File serverFile;
-
-    public String getReviewCreatePage(Model model) {
-        Review review = new Review();
-        model.addAttribute("review", review);
-        return "view/review/review_create";
-    }
-
-    public String createReview(HttpSession session, String reviewTitle, String reviewContent, Model model, Review review) {
+    public FileUpload createReview(User sessionedUser, String reviewTitle, String reviewContent, Review review) {
         // 루트 디렉토리 : 경로에 폴더가 없으면 새로운 폴더를 생성하고 그 폴더로 이미지를 저장한다
         // 현재는 uploadRootPath 로 프로젝트안의 경로로 잡아 주었다.
         File uploadRootDir = new File(uploadRootPath);
@@ -53,29 +46,25 @@ public class ReviewCreateService {
 
             if (fileName != null && fileName.length() > 0) {
                 try {   // 서버에 이미지를 생성한다.
-                    serverFile = new File(uploadRootDir.getAbsolutePath() + File.separator + fileName);
+                    File serverFile = new File(uploadRootDir.getAbsolutePath() + File.separator + fileName);
 
                     BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(serverFile));
                     outputStream.write(fileData.getBytes());
                     outputStream.close();
 
                     uploadFiles.add(serverFile);
-                    model.addAttribute("uploadedFiles", uploadFiles);
-                    model.addAttribute("failedFiles", failedFiles);
-                    reviewSave(session, reviewTitle, reviewContent, fileName);
+                    reviewSave(sessionedUser, reviewTitle, reviewContent, fileName);
                 } catch (Exception e) {
                     System.out.println("Review Create - Error Create File : " + fileName);
                     failedFiles.add(fileName);
                 }
             }
         }
-        return "redirect:/review";
+        return new FileUpload(uploadFiles, failedFiles);
     }
 
-    private void reviewSave(HttpSession session, String reviewTitle, String reviewContent, String fileName) {
+    private void reviewSave(User sessionedUser, String reviewTitle, String reviewContent, String fileName) {
         // review DB 저장
-        User sessionedUser = HttpSessionUtils.getUserSession(session);
-
         String imagePath = "/static/reviewimage/";
         String reviewImagePath = imagePath + fileName;
         System.out.println("review imagePath : " + reviewImagePath);
@@ -84,4 +73,5 @@ public class ReviewCreateService {
         reviewRepository.save(createReview);
         //}
     }
+
 }

@@ -25,37 +25,36 @@ public class ReviewReadService {
     @Autowired
     private PageMakerService pageMakerService;
 
-    public String getReviewList(int pageNum, Model model) {     // 페이징
-
-        PageMakerUtils pageMakerUtils = pageMakerService.generatePageMaker(pageNum, 10, reviewRepository);
-
-        PageRequest pageRequest = PageRequest.of(pageNum - 1, 10, Sort.Direction.DESC, "reviewNo");
-        Page<Review> reviewPage = reviewRepository.findAll(pageRequest);
-        System.out.println("reviewPage size : " + reviewPage.getSize());
-        if (reviewPage.getSize() == 0) {
-            model.addAttribute("reviewlist", new ArrayList<Review>());
-            model.addAttribute("pageMaker", pageMakerUtils);
-            return "view/review/review";
-        }
-        List<Review> reviewList = reviewPage.getContent();
-        System.out.println("reviewPage getContent : " + reviewPage.getContent());
-        model.addAttribute("reviewlist", reviewList);
-        System.out.println("revliew list.size : " + reviewList);
-        System.out.println("pageMaker total : " + pageMakerUtils.getTotalcount());
-        model.addAttribute("pageMaker", pageMakerUtils);
-
-        return "view/review/review";
+    private Review getReviewCheck(Long reviewNo) {
+        return reviewRepository.findById(reviewNo).get();
     }
 
-    public String getReviewDetailPage(Long reviewNo, Model model) {
-        Review review = reviewRepository.findById(reviewNo).get();
+    private Page<Review> getReviewPage(PageRequest pageRequest) {
+        return reviewRepository.findAll(pageRequest);
+    }
+
+    private PageRequest pageRequest(int pageNum) {
+        return PageRequest.of(pageNum - 1, 10, Sort.Direction.DESC, "reviewNo");
+    }
+
+    public PageMakerUtils pageMakerUtils(int pageNum) {
+        return pageMakerService.generatePageMaker(pageNum, 10, reviewRepository);
+    }
+
+    public Page<Review> reviewPage(int pageNum) {
+        Page<Review> reviewPage = getReviewPage(pageRequest(pageNum));
+        return reviewPage;
+    }
+
+    public List<Review> getReviewList(int pageNum) {     // 페이징
+        //List<Review> reviewList = reviewPage(pageNum).getContent();
+        return reviewPage(pageNum).getContent();
+    }
+
+    public Review getReviewDetailPage(Long reviewNo) {
+        Review review = getReviewCheck(reviewNo);
         review.reviewHitIncrease(); // 조회수 증가
-        model.addAttribute("review", review);
-        System.out.println("review Hit : " + review.getReviewHit());
-        System.out.println("model : " + model);
         reviewRepository.save(review);
-
-        return "view/review/review_read";
+        return review;
     }
-
 }
