@@ -3,6 +3,7 @@ package com.example.lagomfurniture.controller;
 import com.example.lagomfurniture.model.User;
 import com.example.lagomfurniture.repository.UserRepository;
 import com.example.lagomfurniture.service.KakaoAPI;
+import com.example.lagomfurniture.service.userservice.UserService;
 import com.example.lagomfurniture.utils.HttpSessionUtils;
 import com.example.lagomfurniture.utils.UserPasswordHashClass;
 import com.google.gson.Gson;
@@ -19,45 +20,39 @@ import java.util.Map;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private KakaoAPI kakao;
 
+    @Autowired
+    private UserService userService;
     @Autowired
     private UserPasswordHashClass userPasswordHashClass;
 
-    @Autowired
-    private KakaoAPI kakao;
-
     //로그인 화면으로 이동
     @GetMapping("/loginForm")
-    public String loginForm() {
-        System.out.println("로그인화면이동");
+    public String loginFormPage() {
         return "view/users/login";
     }
 
     //회원 가입 화면으로 이동
     @GetMapping("/signup")
-    public String Signup() {
-        System.out.println("회원가입화면이동");
+    public String registerFormPage() {
         return "view/users/register";
     }
 
     //회원가입 데이터 전달
-    /*to save user*/
     @PostMapping("/register") //form태그 action 에서 이동됨
     public String register(User user) {
         System.out.println("user: " + user);
-        String hashedPassword = userPasswordHashClass.getSHA256(user.getPassword());
-        user.setPassword(hashedPassword);
-
-        userRepository.save(user); // Insert Query
+        userService.registerSave(user);
         return "redirect:/users/loginForm"; // 회원가입 끝나면 로그인화면으로 이동
     }
 
     //로그인 데이터 전달
     @PostMapping("/login")
     public String login(String userEmail, String password, HttpSession session) {
-        User user = userRepository.findByUserEmail(userEmail);
+        User user = userService.loginRead(userEmail);
         String hashedPassword = userPasswordHashClass.getSHA256(password);
+
         if (user == null) {
             System.out.println("등록된 아이디 없음");
             return "redirect:/users/loginForm";
@@ -66,7 +61,6 @@ public class UserController {
             System.out.println("비밀번호 틀림");
             return "redirect:/users/loginForm";
         }
-
         //로그인 성공, 세션에 로그인 정보 저장
         session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
         System.out.println("세션에 저장되는 User정보 :  " + user);
@@ -95,7 +89,6 @@ public class UserController {
         return "redirect:/";
 
     }
-
 
     //카카오 로그아웃
     @RequestMapping(value = "/logout")

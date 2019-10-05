@@ -3,7 +3,7 @@ package com.example.lagomfurniture.service.productservice;
 import com.example.lagomfurniture.model.Product;
 import com.example.lagomfurniture.repository.ProductRepository;
 import com.example.lagomfurniture.service.PageMakerService;
-import com.example.lagomfurniture.utils.ProductPageMakerUtils;
+import com.example.lagomfurniture.utils.PageMakerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -54,8 +54,8 @@ public class ProductPaginationService {
         return productRepository.findByProductCategory("bed", PageRequest.of(pageNum-1, 6, Sort.Direction.ASC,"productId"));
     }
 
-    public ProductPageMakerUtils generateProductPageMaker(int pageNum, int contentNum, Page<Product> products){
-        ProductPageMakerUtils productPageMakerUtils = pageMakerService.generateProductPageMaker(pageNum, contentNum, products);
+    public PageMakerUtils generateProductPageMaker(int pageNum, int contentNum, Page<Product> products){
+        PageMakerUtils productPageMakerUtils = pageMakerService.generateProductPageMaker(pageNum, contentNum, products);
         return productPageMakerUtils;
     }
 

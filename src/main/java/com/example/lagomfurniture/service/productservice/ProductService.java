@@ -1,7 +1,6 @@
 package com.example.lagomfurniture.service.productservice;
 
 import com.example.lagomfurniture.model.Product;
-import com.example.lagomfurniture.model.User;
 import com.example.lagomfurniture.repository.ProductIdRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

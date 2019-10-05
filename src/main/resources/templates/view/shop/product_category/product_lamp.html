@@ -103,7 +103,7 @@
                             <!-- Product Meta Data -->
                             <div class="product-meta-data">
                                 <div class="line"></div>
-                                <p class="product-price" th:text="${product.productPrice}"></p>
+                                <p class="product-price" th:text="${product.productPrice} +' 원'"></p>
                                 <a href="../product_detail.html">
                                     <h6 th:text="${product.productName}"></h6>
                                 </a>
@@ -117,10 +117,10 @@
                                 <!--<i class="fa fa-star" aria-hidden="true"></i>-->
                                 <!--<i class="fa fa-star" aria-hidden="true"></i>-->
                                 <!--</div>-->
-                                <div class="cart">
-                                    <a href="../cart.html" data-toggle="tooltip" data-placement="left" title="Add to Cart"><img
-                                            src="/static/img/core-img/cart.png" alt=""></a>
-                                </div>
+                                <!--<div class="cart">-->
+                                    <!--<a href="../cart.html" data-toggle="tooltip" data-placement="left" title="Add to Cart"><img-->
+                                            <!--src="/static/img/core-img/cart.png" alt=""></a>-->
+                                <!--</div>-->
                             </div>
                         </div>
                     </div>

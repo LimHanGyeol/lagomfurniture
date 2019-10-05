@@ -2,7 +2,7 @@ package com.example.lagomfurniture.service.android;
 
 import com.example.lagomfurniture.model.Product;
 import com.example.lagomfurniture.model.User;
-import com.example.lagomfurniture.repository.ProductRepository;
+import com.example.lagomfurniture.repository.ProductIdRepository;
 import com.example.lagomfurniture.repository.UserRepository;
 import com.example.lagomfurniture.utils.UserPasswordHashClass;
 import com.google.gson.Gson;
@@ -19,7 +19,7 @@ public class AndroidService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private ProductRepository productRepository;
+    private ProductIdRepository productRepository;
     @Autowired
     private UserPasswordHashClass userPasswordHashClass;
 

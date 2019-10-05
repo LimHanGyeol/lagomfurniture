@@ -4,7 +4,6 @@ import com.example.lagomfurniture.model.Product;
 import com.example.lagomfurniture.service.productservice.ProductPaginationService;
 import com.example.lagomfurniture.service.productservice.ProductService;
 import com.example.lagomfurniture.utils.PageMakerUtils;
-import com.example.lagomfurniture.utils.ProductPageMakerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -35,7 +34,7 @@ public class ProductController {
     @GetMapping("/bed")
     public String bed(@RequestParam(value = "pageNum", defaultValue = "1") String pageNum, Model model) {
         Page<Product> productPage = productPaginationService.getProductPage(returnIntValue(pageNum));
-        ProductPageMakerUtils productPageMakerUtils = productPaginationService.generateProductPageMaker(returnIntValue(pageNum),6,productPage);
+        PageMakerUtils productPageMakerUtils = productPaginationService.generateProductPageMaker(returnIntValue(pageNum),6,productPage);
         List<Product> productList = productPaginationService.getProductList(returnIntValue(pageNum));
 
 
