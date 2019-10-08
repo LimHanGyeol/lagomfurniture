@@ -4,7 +4,7 @@
 
 ## 배포
 [LagomFurniture 바로가기](http://54.180.193.22:8080/)  
-Test 계정 : test@naver.com / test8291  
+Test 계정 : test@naver.com / test8291**  
 
 ## 기여자
 LimHanGyeol : [GitHub 바로가기](https://github.com/LimHanGyeol/)  
