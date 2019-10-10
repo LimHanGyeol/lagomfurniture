@@ -28,8 +28,9 @@ public class AndroidService {
         System.out.println("Android Register 확인 - email : " + user.getUserEmail() + " password : " + user.getPassword());
         User RegisterUser = userRepository.findByUserEmail(user.getUserEmail());
         if (RegisterUser != null) {
-            System.out.println("회원가입 실패 : 이메일 중복");
+            System.out.println("회원가입 실패 : 이미 가입한 회원");
             androidRegister.put("response","exist");
+            androidRegister.put("resultcode","1");
             return androidRegister;
         }
         String hashedPassword = userPasswordHashClass.getSHA256(user.getPassword());
@@ -39,6 +40,7 @@ public class AndroidService {
         userRepository.save(user);
         System.out.println("Android Register 성공");
         androidRegister.put("response","success");
+        androidRegister.put("resultcode","1");
         System.out.println("Register User Json : " + androidRegister);
 
         return androidRegister;

@@ -51,11 +51,11 @@
 
                         </div>
 
-                        <div class="cart-btn mt-15" align="right">
+                        <div th:if="${session.sessionUser.id == review.reviewWriter.id}" class="cart-btn mt-15" align="right">
                             <a th:href="'/review/review_read/'+${review.reviewNo}+'/review_update'"><button class="btn amado-btn" style="width: 80px;">수정</button></a>
                         </div>
                         <form th:action="'/review/review_read/'+${review.reviewNo}+'/review_delete'" method="post">
-                        <div class="cart-btn mt-15" align="right">
+                        <div th:if="${session.sessionUser.id == review.reviewWriter.id}" class="cart-btn mt-15" align="right">
                             <input type="hidden" value="delete">
                             <button class="btn amado-btn" style="width: 80px;">삭제</button>
                         </div>
