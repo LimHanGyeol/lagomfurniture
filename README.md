@@ -2,10 +2,6 @@
 쇼핑몰 주요 기능이 있는 웹 서비스 설계 및 개발  
 기간 : 2019.06 ~ 2019.09  
 
-## 배포
-[LagomFurniture 바로가기](http://54.180.193.22:8080/)  
-Test 계정 : test@naver.com / test8291  
-
 ## 기여자
 LimHanGyeol : [GitHub 바로가기](https://github.com/LimHanGyeol/)  
 Jennyleeee : [GitHub 바로가기](https://github.com/jennyleeee/)  
